@@ -16,15 +16,15 @@ about:
 ---
 
 # Present
-I have always been fascinated by the diverse ways people wrangle and analyze data. There is something magical about a single person or a small team making significant progress in their work/mission due to utilizing a well-crafted tool/language. This curiosity has led me to use R, Python, Julia, and SQL as languages on a tool bench, selecting the right language for the job.
+I have always been fascinated by how people wrangle and analyze data. There is something magical about a single person or a small team making significant progress in their work/mission due to utilizing a well-crafted tool/language. This curiosity has led me to use R, Python, and SQL as languages on a tool bench, selecting the right language for the job. In recent years, I have gotten involved in the infrastructure side, from VMs to containers to Kubernetes, as I have learned different ways to support such analysis.
 
-Currently, I am a Solutions Engineer at RStudio, where I empower data science teams in organizations to collaborate better and productionalize their data science workflows.
+Currently, I am a Senior Solutions Engineer at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate better and productionalize their data science workflows. Half of my time is spent working with data science teams and the other half with IT/DevOps in the infrastructure side to ensure optimal integration and configuration.
 
-Off the computer, I live in the Hudson Valley, New York, and spend as much time outside as I can. You can find me trail running and backpacking in the Catskills, cycling farm roads, or cooking up something new with fresh produce.
+Off the computer, I live in the Hudson Valley, New York, and spend as much time outside as I can. You can find me gardening, trail running/backpacking in the Catskills, cycling farm roads, or cooking up something new with fresh produce. I also server as a volunteer firefighter in the town of Livingston, NY where I proudly serve my community.
 
 # Past
 * Bachelor's degree from Drexel University in Business Administration with concentrations in Finance and Economics (when I thought global markets trading was interesting)
 * Associate at Nomura on the interest rate derivatives sales desk (learned a lot about the inner workings of the mortgage market and sales in general)
-* Quantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure and productionalization as I was responsible for setting it all up)
+* Quantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure, and productionalization as I was responsible for setting it all up)
 * Portfolio Solutions Developer at Neuberger Berman (learned a lot about infrastructure at a larger company with IT constraints and solution selling to large asset owners)
 * Solutions Engineer at CARTO (learned a lot about cloud infrastructure, data warehouses, geospatial analysis and enterprise data science)
