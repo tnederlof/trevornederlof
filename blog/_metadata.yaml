@@ -1,0 +1,21 @@
+# options apply to all posts in this folder
+
+# freeze computational output
+freeze: auto
+
+# Make a big title block
+title-block-banner: false
+
+# long dates
+date-format: long
+
+# smooth scroll
+smooth-scroll: true
+
+# Default author
+author:
+  - name: Trevor Nederlof
+    url: https://www.trevor.nederlof.me
+
+# citation
+citation: true

@@ -1,15 +1,6 @@
 ---
-title: "Trevor Nederlof"
-about:
-  template: trestles
-  image: profile.png
-  links:
-    - icon: github
-      text: Github
-      href: https://github.com/tnederlof/
-    - icon: linkedin
-      text: LinkedIn
-      href: https://www.linkedin.com/in/trevor-nederlof/
+title: ""
+draft: false
 ---
 
 # Present

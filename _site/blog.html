@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>about – Trevor Nederlof</title>
+<title>Blog – Trevor Nederlof</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -25,6 +25,8 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -50,7 +52,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -72,11 +132,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link active" href="./blog.html" aria-current="page"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
@@ -105,42 +165,70 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#present" id="toc-present" class="nav-link active" data-scroll-target="#present">Present</a></li>
-  <li><a href="#past" id="toc-past" class="nav-link" data-scroll-target="#past">Past</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Blog</h1>
+</div>
 
 
 
-<section id="present" class="level1">
-<h1>Present</h1>
-<p>I have always been fascinated by how people wrangle and analyze data. There is something magical about a single person or a small team making significant progress in their work/mission due to utilizing a well-crafted tool/language. This curiosity has led me to use R, Python, and SQL as languages on a tool bench, selecting the right language for the job. In recent years, I have gotten quite involved on the infrastructure/architecture side of things, from Linux VMs to containers and Kubernetes.</p>
-<p>Currently, I am a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. Half of my time is spent working with data science teams to improve their effectiveness and the other half with IT/DevOps to ensure optimal architecture, integration and configuration.</p>
-<p>Off the computer, I live in the Hudson Valley, New York, and spend as much time outside as I can. You can find me gardening, trail running/backpacking in the Catskills, cycling farm roads, or cooking up something new. I am also a fire commissioner and volunteer firefighter in Livingston, NY, where I proudly serve my community.</p>
-</section>
-<section id="past" class="level1">
-<h1>Past</h1>
-<ul>
-<li>Solutions Engineer at CARTO (learned a lot about cloud infrastructure, data warehouses, geospatial analysis and enterprise data science)</li>
-<li>Portfolio Solutions Developer at Neuberger Berman (learned a lot about infrastructure at a larger company with IT constraints and solution selling to large asset owners)</li>
-<li>Quantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure, and productionalization as I was responsible for setting it all up)</li>
-<li>Associate at Nomura on the interest rate derivatives sales desk (learned a lot about the inner workings of the mortgage market and sales in general)</li>
-<li>Bachelor’s degree from Drexel University in Business Administration with concentrations in Finance and Economics (when I thought global markets trading was interesting)</li>
-</ul>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
-</section>
+</header>
 
-</main> <!-- /main -->
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="cXVhcnRvLGt1YmVybmV0ZXMsY2xvdWQsYXdz" data-listing-date-sort="1711944000000" data-listing-file-modified-sort="1743535234191" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="84">
+<div class="thumbnail">
+<p><a href="./blog/2025-04-1-hello-world/index.html" class="no-external"></a></p><a href="./blog/2025-04-1-hello-world/index.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./blog/2025-04-1-hello-world/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./blog/2025-04-1-hello-world/index.html" class="no-external">Hello, World!</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./blog/2025-04-1-hello-world/index.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./blog/2025-04-1-hello-world/index.html" class="no-external">First blog post introducing the blog </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./blog/2025-04-1-hello-world/index.html" class="no-external">
+<div class="listing-date">
+2024-04-01
+</div>
+<div class="listing-author">
+Trevor Nederlof
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

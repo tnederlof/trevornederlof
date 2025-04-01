@@ -1,0 +1,25 @@
+---
+title: "Trevor Nederlof"
+about:
+  template: trestles
+  image: profile.png
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/tnederlof/
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/trevor-nederlof/
+    - icon: envelope-at
+      text: Email
+      href: mailto:trevor.nederlof@hey.com
+email-obfuscation: javascript
+---
+
+## Welcome to my personal website!
+
+Hello, I am Trevor Nederlof, a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. I also enjoy exploring and pushing the boundaries of cloud-native technologies, especially Kubernetes.
+
+To learn more about me visit my [About page](/about.qmd).
+
+To learn more about technologies I am interested in visit my [Blog feed](/blog.qmd).

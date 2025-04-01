@@ -1,8 +1,36 @@
 [
   {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Hello, World!\n\n\n\n\n\nFirst blog post introducing the blog \n\n\n\n\n\n2024-04-01\n\n\nTrevor Nederlof\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "blog/2025-04-1-hello-world/index.html",
+    "href": "blog/2025-04-1-hello-world/index.html",
+    "title": "Hello, World!",
+    "section": "",
+    "text": "First Post Welcome!\nWelcome to my blog, where I intend to post in-depth articles about how to accomplish specific setups end to end, where I found other tutorials incomplete or nonexistent. My interests are mainly in cloud-native technologies such as Kubernetes and AWS, but I may stray from time to time.\nI welcome all readers to please let me know what they found useful and what they would like to learn more about. You can find me on Linkedin or email me using the links in the header."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Trevor Nederlof",
+    "section": "",
+    "text": "Hello, I am Trevor Nederlof, a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. I also enjoy exploring and pushing the boundaries of cloud-native technologies, especially Kubernetes.\nTo learn more about me visit my About page.\nTo learn more about technologies I am interested in visit my Blog feed."
+  },
+  {
+    "objectID": "index.html#welcome-to-my-personal-website",
+    "href": "index.html#welcome-to-my-personal-website",
+    "title": "Trevor Nederlof",
+    "section": "",
+    "text": "Hello, I am Trevor Nederlof, a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. I also enjoy exploring and pushing the boundaries of cloud-native technologies, especially Kubernetes.\nTo learn more about me visit my About page.\nTo learn more about technologies I am interested in visit my Blog feed."
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "Trevor Nederlof",
+    "title": "Present",
     "section": "",
     "text": "Present\nI have always been fascinated by how people wrangle and analyze data. There is something magical about a single person or a small team making significant progress in their work/mission due to utilizing a well-crafted tool/language. This curiosity has led me to use R, Python, and SQL as languages on a tool bench, selecting the right language for the job. In recent years, I have gotten quite involved on the infrastructure/architecture side of things, from Linux VMs to containers and Kubernetes.\nCurrently, I am a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. Half of my time is spent working with data science teams to improve their effectiveness and the other half with IT/DevOps to ensure optimal architecture, integration and configuration.\nOff the computer, I live in the Hudson Valley, New York, and spend as much time outside as I can. You can find me gardening, trail running/backpacking in the Catskills, cycling farm roads, or cooking up something new. I am also a fire commissioner and volunteer firefighter in Livingston, NY, where I proudly serve my community.\n\n\nPast\n\nSolutions Engineer at CARTO (learned a lot about cloud infrastructure, data warehouses, geospatial analysis and enterprise data science)\nPortfolio Solutions Developer at Neuberger Berman (learned a lot about infrastructure at a larger company with IT constraints and solution selling to large asset owners)\nQuantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure, and productionalization as I was responsible for setting it all up)\nAssociate at Nomura on the interest rate derivatives sales desk (learned a lot about the inner workings of the mortgage market and sales in general)\nBachelor’s degree from Drexel University in Business Administration with concentrations in Finance and Economics (when I thought global markets trading was interesting)"
   }
