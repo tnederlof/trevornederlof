@@ -4,6 +4,9 @@ project:
 website:
   title: "Trevor Nederlof"
   search: false
+  body-footer: |
+      <!-- 100% privacy-first analytics -->
+      <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   navbar:
     background: primary
     right:
