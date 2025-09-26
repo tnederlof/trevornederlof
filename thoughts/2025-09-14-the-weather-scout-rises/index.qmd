@@ -1,0 +1,174 @@
+---
+title: "The Weather Scout Rises with Amp"
+description: |
+    Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).
+date: "2025-09-14"
+categories:
+  - amp
+  - ai
+  - llm
+  - agent
+  - frontend
+  - gis
+  - weather
+code-fold: true
+draft: false
+freeze: true
+appendix-style: none #(default, plain, none)
+---
+
+## TL;DR
+
+[The Weather Scout](https://theweatherscout.com) is an interactive site that allows users to scout likely weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using [Amp](https://ampcode.com/) (Sourcegraph's agentic coding tool), and this post details the process of the build. One interesting feature of [Amp](https://ampcode.com/) is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized [Amp](https://ampcode.com/) during the build.
+
+## Introduction
+
+We are currently experiencing a golden age for ideas. Just a year ago, many thoughts would come to mind, but few were developed due to the time commitment required. The advent of agentic coding tools (like Amp, Claude Code, Codex, etc.) has significantly changed the landscape of what is possible and what can actually be created.
+
+Over the past few weeks, I have rebuilt The Weather Scout, an interactive web app for exploring typical climate patterns across the US, from the ground up. Although I had long wanted to undertake this project, I never found the time to do it until now. It has been thrilling to bring it to life rapidly using [Amp](https://ampcode.com/). In this post, I will share lessons learned and take you along on my journey.
+
+
+## Background
+
+I enjoy backpacking and the planning that comes with it, which involves a lot of preparation. [Andrew Skurka](https://andrewskurka.com/about-andrew-skurka/), recognized as Adventurer of the Year by both Outside and National Geographic, introduced me to a [methodology for organizing and planning these trips](https://andrewskurka.com/planning-course/). One valuable tip he shared was to use the [30-Year Climate Normals from NOAA](https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals) to understand the likely weather at any given location. However, there were several challenges with this approach:
+
+1. Accessing and using the data was user-unfriendly.
+2. The data was only available from certain weather stations, which led to a lot of guesswork.
+
+When I discovered that the data was available on an FTP server, my tech-savvy brain thought there must be a better way to handle it. That’s when The Weather Scout was born.
+
+Over the years, The Weather Scout has existed in various formats, but the architecture never felt quite right, and it was too costly to keep running indefinitely. Each version was enjoyable to build and attracted some users, but eventually, I had to shut them down because I didn't want to bear the expenses.
+
+In 2018, I created the first version of The Weather Scout as a [Shiny application](https://shiny.posit.co/) running on R code, which I was working with at the time. While it had advantages that allowed me to perform calculations on the server for accurate results, it proved to be not scalable, prone to errors, and too expensive to maintain in the long run.
+
+In 2020, I developed the second version of The Weather Scout with the backend written in [Elixir](https://elixir-lang.org/) (a language I was learning) using the [Phoenix framework](https://www.phoenixframework.org/), while the frontend was built with React. This version was significantly more scalable, efficient, and user-friendly. However, due to the high costs associated with running the PostgreSQL and Elixir backend, I ultimately decided to decommission it. I received several emails over the years requesting its return, with some even offering to donate funds, but it wasn’t enough to sustain the project.
+
+Fast forward to 2025: agentic coding tools have transformed not only how I code but also the types of projects I can pursue. I initially began using Anthropic's [Claude Code](https://www.anthropic.com/claude-code), which yielded great success. Following that, I discovered Sourcegraph's [Amp](https://ampcode.com/) and was impressed by its performance and user experience. This excitement led to discussions with the team at Sourcegraph, and I eventually accepted a position there as a Senior Solutions Engineer.
+
+## Amp
+
+[Amp](https://ampcode.com/) is an agentic coding tool that leverages some of the best models available, specifically Sonnet 4 as the primary model and OpenAI's o3 for more complex reasoning tasks. It also includes a server component, enabling users to view all threads (conversations) on the web. In this post, I will link to several of those threads for anyone interested in seeing the specific prompts I used with [Amp](https://ampcode.com/). Typically, I utilize [Amp](https://ampcode.com/) to "consult the Oracle," which activates the o3 model for architecture advice, addressing difficult bugs, and planning projects. Once that stage is complete, I switch to the main model, Sonnet 4, for implementation.
+
+## Building The Weather Scout
+
+A couple of years ago, I discovered the [PRISM group's 30-year normals data](https://prism.oregonstate.edu/normals/), which utilizes NOAA climate normals and other inputs to create 800-meter grids across the United States. I realized that this data could be a game-changer for The Weather Scout if I ever decided to build another version.
+
+Another crucial component was geocoding search terms into coordinates to retrieve weather information. While there are well-known services for this, such as Google Maps and Mapbox, I was worried about the associated costs, as my main goal for this rebuild was to reduce expenses. Therefore, I reached out to [Amp](https://ampcode.com/) for some advice.
+
+
+### Architecture Advice
+
+I had a clear vision for the user experience I wanted to design: it needed to be simple and intuitive while keeping costs as low as possible. [Amp](https://ampcode.com/) offered valuable guidance on architectural options based on these requirements. In [this thread](https://ampcode.com/threads/T-adf71bfd-4371-429e-bb9c-3a7ae268107f), I explored various architecture options by providing detailed prompts and consulting the oracle to utilize the O3 deep reasoning model. [Amp](https://ampcode.com/) was especially effective at identifying services with generous free or low-cost tiers, which helped maintain low costs once I made it clear that this was a top priority.
+
+To store common Points of Interest (POI) and location names, I would need a PostgreSQL database, which the search function would use to plot coordinates on a map and sample climate data from raster data (PRISM climate normals) stored in Cloudflare's R2 buckets.
+
+Given my familiarity with both, a React/TypeScript front end paired with a FastAPI/Python backend made the most sense to me. However, [Amp](https://ampcode.com/) provided some interesting recommendations regarding the use of Cloudflare Workers, which serve as APIs on the edge and offer significant speed advantages. The current plan is to build the following components:
+
+- React Frontend
+- Cloudflare Worker
+- FastAPI Backend
+
+#### Plan, Iterate, Execute
+
+The more I delved into Cloudflare Workers, it had me reconsider the necessity of a FastAPI backend. Conversations with [Amp](https://ampcode.com/) led to the realization that I could focus solely on developing the frontend and the worker. With this clarity, I asked [Amp](https://ampcode.com/) to consult the oracle and [draft a step-by-step plan](https://ampcode.com/threads/T-10c7e2cd-f791-4329-b748-59f6fdcd908e). Each step includes code references, snippets, and thorough descriptions. This method is one I frequently employ with Amp for optimal outcomes. The first task is to engage a strong reasoning model (oracle) for planning, saving the results in a TODO.md file. This document serves as a valuable tool for me to review, make adjustments, and further interrogate the plan. These models are good at playing devil’s advocate and exploring alternative options, even though it created the original plan! The key is to consistently initiate new fresh threads.
+
+#### Data Strategy
+
+On the data side of things, I wanted to use the PRISM 30-year normals data, but it came in a .bil format. How can I retrieve climate information based on a click on a JavaScript map anywhere in the US from this data? In consulting with [Amp](https://ampcode.com/), the best strategy appeared to be building a conversion pipeline to transform raw data into web tiles. The oracle was exceptionally helpful in drawing up a plan, including what this Python conversion script would look like. Being able to search for information about the frontend map I planned to use, combined with being able to load in the raw data, gave it a good head start in creating a working script. It was also smart enough to begin with a single variable and a month for testing, only expanding to all the data after iterating a few times and fixing issues as they appeared.
+
+For storage of POI names and coordinates, [Amp's](https://ampcode.com/) plan called for another conversion script + database loading script to populate a PostgreSQL database stored in Supabase efficiently. PostgreSQL was a good choice since it has numerous well-known extensions for geospatial operations and fuzzy searching.
+
+
+### Building
+
+With a comprehensive [Amp](https://ampcode.com/) generated plan in place, after some back-and-forth to refine it, it was time to build. 
+
+#### Data Loading
+
+Before building the frontend and worker, the data needed to be transformed and loaded. [Amp](https://ampcode.com/) was efficient at iterating through the [conversion and loading script](https://ampcode.com/threads/T-72f4c1a8-42dc-4b2c-afcf-78fb161bf521) to get them to a point where they were working well. I simply had to run the Python scripts on the full dataset. There were a few snags related to using the Cloudflare worker CLI with `wrangler` and the Supabase CLI `supabase`, but [Amp](https://ampcode.com/) helped me quickly parse through the documentation to troubleshoot.
+
+#### First Build
+
+After lots of preparation, it was time to make The Weather Scout finally come alive. I prompted [Amp](https://ampcode.com/) to execute the plan outlined in `BUILD_TODO.md` and let it run through the initial build. First, I noticed some VS Code IDE diagnostic errors in the TypeScript codebase, so I started a fresh thread and had [Amp](https://ampcode.com/) quickly resolve those issues. [Amp](https://ampcode.com/) can retrieve diagnostic information from the IDE, which makes it efficient at identifying and fixing errors like this. I was able to run the frontend and workers locally for the first time and visit the URL in my browser at a localhost address, exciting!
+
+Unfortunately, there were several apparent issues:
+
+- No basemap in the JavaScript map
+- Text in the search box had no effect
+- Clicking the map returned NAs in the temperature max, min, and avg boxes
+
+From past Geospatial work, I knew I would need to find a basemap provider to load into the application. [Amp](https://ampcode.com/) helpfully [searched the web and identified a couple of free/low-cost options](https://ampcode.com/threads/T-561f0d27-9d1e-4c61-8b54-ccca5522ff96). MapTiler was an attractive option since it includes an outdoor-focused basemap, perfect for this outdoor-focused weather search application.
+
+For the other two issues, I suspected it was related to problems getting data to the frontend from the backend workers.
+
+Before I addressed the data issues, I sought a more efficient way to test the complete suite of services. Anytime I have multiple services in a project, I reach for podman compose, so I tasked [Amp](https://ampcode.com/) with setting up a podman compose file to containerize each service and set up a just file so the agent could use simple commands such as `just run`, `just stop`, `just logs`, etc. [Amp](https://ampcode.com/) was surprisingly good at setting up this infrastructure. I have used [Amp](https://ampcode.com/) in projects with this sort of infrastructure setup in the past, and it was efficient in using them. However, this was my first time using an agent to generate them.
+
+#### AGENTS.md
+
+For the rest of the development of The Weather Scout, I planned on using [Amp](https://ampcode.com/) in many different ways. To make [Amp](https://ampcode.com/) more effective, it is imperative to have an `AGENTS.md` file to list build, test, and architecture information. The contents of this file are added to the context of each thread, which saves each thread from trying the wrong build step and wasting valuable time/tokens. First, I asked [Amp](https://ampcode.com/) to generate one on its own, which always feels a bit circular, but it [did a great job](https://ampcode.com/threads/T-cf0bc424-ea5e-43c3-bf0f-3bead535228b). I edited a few works and was ready to start diving into further troubleshooting and refinement.
+
+#### Data Troubleshooting
+
+I experimented with various prompting techniques to get [Amp](https://ampcode.com/) to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using `just run`, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it's a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an [example thread](https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145) where I had it fix a search issue.
+
+[Amp](https://ampcode.com/) had incorrectly wired up the search box to the interactive map, and markers were not placed correctly on map click. Once [Amp](https://ampcode.com/) resolved these issues, it appeared that data issues persisted. [Amp](https://ampcode.com/) identified the issue as the worker service shutting down with an error in the logs. Before proceeding, it was clear that the worker needed to be running correctly. [Amp](https://ampcode.com/) also suggested to either use local data with the `--local` flag passed to `wrangler` or use `--remote` to use the actual R2 bucket. Since I had already loaded the data and wanted to ensure the R2 buckets in Cloudflare were actually working, I opted for the `--remote` option. Getting the `wrangler` commands right so that it would start properly took more time than I wanted it to, and unfortunately, [Amp](https://ampcode.com/) was only of limited use. It made suggestions, but ultimately, I had to learn more about `wrangler` and the Worker/R2 infrastructure to determine the correct configuration settings.
+
+Finally the frontend was working with the worker but graphs were still blank. I provided a detailed description of the actions taken to reproduce the expected behavior, along with screenshots. [Amp](https://ampcode.com/) [traced the issue](https://ampcode.com/threads/T-91486df7-b836-49b9-9461-55434469d893) to how the data was being sampled from the tiles we generated earlier in the process. The basic version of the application was working!
+
+### Refinement
+
+At this point, I had a working application, but there were several issues/refinements I wanted to tackle before I could deploy for users.
+
+#### Search Issues
+
+After manually testing the search with different locations across the US, I noticed that the results fell short of user standards. I went down a rabbit hole with [Amp](https://ampcode.com/) to get suggestions on how to improve search, and to its credit, it did improve with various fuzzy search logic implementations. However, I was still not satisfied for a couple of reasons:
+
+- Potential matches were slightly slow to load
+- Many locations were not being found at all
+- The information provided in the dropdown was not always helpful ("POI")
+
+I have prior experience with geospatial web applications, and I knew that Google Maps had spoiled users to expecting the same quality of search suggestions. I began to think that implementing my own search with a database of locations was the wrong approach; there is simply no way the quality could match that of a service like Google Maps. I turned to the oracle in [Amp](https://ampcode.com/) to [canvas the different geocoding + search API services](https://ampcode.com/threads/T-8e2e41c4-0fc2-4855-9477-2ff99cdc4bd1) and present recommendations, knowing I still wanted to keep costs low. Google Maps was on the list, but I quickly ruled it out due to cost. The oracle suggested Mapbox's Search API service, which offers a generous free tier that should suffice given visitor expectations.
+
+Next, I turned to [Amp](https://ampcode.com/) to weigh the pros and cons of this decision to replace the current search with Mapbox. The pros outweighed the cons. I could eliminate Supabase/PostgreSQL, provide users with a superior search experience in terms of both accuracy and speed, and reduce the overall complexity of the code base.
+
+#### Adding MapBox
+
+With the decision made, the next step was, as always, to consult the oracle to create a comprehensive implementation plan, supplying it with links to Mapbox search API documentation. I went through a couple of iterations after I told [Amp](https://ampcode.com/) it doesn't need to be backwards compatible (this removed complexity) and to map out the complete removal of Supabase.
+One interesting part of the plan was the setting of `poi_categories` and `poi_categories_exclusions`. Initially, I liked the idea of steering the search results to a specific type of POI, such as mountains or lakes. However, I realized the categories it generated may not be correct. I found the Mapbox API endpoint that enumerates all the Mapbox POI categories and asked [Amp](https://ampcode.com/) to cross-reference.
+Indeed, some categories were fabricated. I went through it carefully to ensure only legitimate categories were entered.
+
+With great excitement, knowing how much of a user improvement this would be, I started a new thread and let [Amp](https://ampcode.com/) go to work executing the lengthy plan. From the first testing, the search worked like a dream; the results were so fast and helpful. However, upon testing more locations, I realized that some places I expected to be available were either not returning at all or returning to other countries. In the initial plan [Amp](https://ampcode.com/) suggested constraining the Mapbox API to only return results within the US, which puzzled us both. After consulting with the oracle, [Amp](https://ampcode.com/) finally figured out that the setting `MAPBOX_COUNTRY_FILTER = "us"` actually had to be `MAPBOX_COUNTRY_FILTER = "US"`, with the capitalized `US`. I was so happy for the oracle in that moment, I know from experience that it is the kind of bug that can drive a developer crazy and hold up progress.
+
+Search results were supposedly limited to the US, but some obvious locations were still randomly not returning any results. Puzzled I asked [Amp](https://ampcode.com/) and it went about systematically troubleshooting:
+
+- Use `just run` to start podman compose
+- Accessed `localhost` in the browser
+- Tried several search terms and recorded their results, including screenshots
+- Check the browser console for any errors
+- Checked the podman logs for worker errors
+
+It was in the worker logs that some 4XX code errors were spotted, indicating that the parameters being sent to Mapbox in some cases were incorrect. [Amp](https://ampcode.com/) had a theory, so it continued to troubleshoot by removing various Mapbox API parameters one by one to see the results. Sure enough, by removing the `poi_categories` and `poi_categories_exclusions` categories, everything worked as expected. The results seemed so good without them specified, it seemed prudent to remove them and continue on. At last, the search was working!
+
+The last search-related task I wanted to refine is the type of information displayed in the search suggestions. I knew the Mapbox must be returning some details, such as city, state, and type of POI, etc. Still, rather than parsing through examples and documentation, I asked [Amp](https://ampcode.com/) to [restructure how the search results are displayed](https://ampcode.com/threads/T-0f229ccc-a1ce-4ebb-a6fa-126b78d10386), using information from Mapbox, and show me the totality of available information. After a couple of threads, search items were richer, and I was happy with the experience.
+
+#### UI Enhancements
+
+When I had the oracle write the very first plan, I was focused on the architecture and technology, and I omitted much information about what I expected the UI to look like. The only information [Amp](https://ampcode.com/) had to go on is that I wanted a location search box, a month selector, an interactive map, and the climate data for the selected location displayed. It did an excellent job bringing the application to life with minimal guidance in that respect, but I had some changes in mind before sharing it with other users.
+
+First, I wanted to overhaul the general UI to make it consistent and modern. The oracle is great for this sort of research. I often ask it to research a bunch of directions and make a recommendation. That way I can read through options (some of which I may have no prior experience with) and make a fact based decision before continuing. In this case [Amp](https://ampcode.com/) [provided a good recommendation](https://ampcode.com/threads/T-299b7d89-9d38-4a53-b511-613e382a1e6a) that I proceeded with.
+
+Next, I turned to redesigning the climate data display. It may sound almost unbelievable, but simply drawing a mockup of the desired UI state and providing it to [Amp](https://ampcode.com/) as an image is often a good strategy. After creating a crude mockup in Figma of what I wanted the UI to look like under the map (data visualization part), I sent [Amp](https://ampcode.com/) a [screenshot of the current state and my mockup](https://ampcode.com/threads/T-eff01c26-b804-41b9-80c4-26c2eaa2c2e5), asking the Oracle to create an implementation plan once again. Despite knowing that people had done this, I was still blown away by the plan, which came back to implement my vision; it was even better than I had expected. [Amp](https://ampcode.com/) inferred some design decisions that I had in my head, but didn't spend much time putting in the image, like a dashed vertical line to mark the month.
+
+I went through a couple of threads with [Amp](https://ampcode.com/), tweaking the UI to make it more user-friendly with information about the location. It also suggested that the elevation would be helpful for the user, which I agreed with, but I didn't want to spend a lot of money on yet another API request. Helpfully, the oracle suggested two options: AWS Terrain Tiles, which are freely hosted on S3, and MapTiler's elevation API service. To avoid any data mismatch issues, I opted to [use MapTiler's elevation API](https://ampcode.com/threads/T-7c368c25-fd44-4b76-bd19-52c827c20d3c), which would ensure that the elevations on the base map matched. With no objections remaining, I had [Amp](https://ampcode.com/) add that information for the user, neat!
+
+### Deployment
+
+Deployment was the easiest part of getting The Weather Scout off the ground. A sentence I never thought I would type, as the opposite was true in most past projects. Because I spent so much time upfront with [Amp](https://ampcode.com/) planning the Architecture and integrating services from the beginning, I already knew how services would be hosted on Cloudflare, and the raster data was already in R2 buckets all along. I had [Amp](https://ampcode.com/) help me create a checklist (with the Oracle's help, of course) of items to prepare for deployment, including Cloudflare configuration, CI/CD pipelines, a release strategy, and additional security/cost implementations.
+
+The deployment plan wasn't the type that I could have the main agent execute, as much of the setup was in Cloudflare, including adding secrets, etc. Instead, I had the Oracle assign roles to each step as either human or agent, and I went through it step by step. There were a few steps I could automate with [Amp](https://ampcode.com/), such as writing the actual GitHub actions .yaml files. It still took me some time to get this all right but having [Amp](https://ampcode.com/) to ask when I got stuck sped things up.
+
+The list of enhancements for a project like this is always long, but it's a good start. You can check out the website live now a https://theweatherscout.com
+
+## Learnings
+
+Taking on a project from start to finish using [Amp](https://ampcode.com/) was a rewarding experience. Using these agentic tools is a skill that needs to be cultivated. We are only in the early innings, I am eager to continue building. My biggest takeaways are to start new threads more often, slow down and make deliberate architectural decisions, and to have the models check their own work continuously. Sometimes the models produce precisely what you are looking for, and sometimes they produce terrible code. It's a highly jagged surface area, so you need to always be on your toes and supervising. Still, I created this site in significantly less time than if I were coding by hand.

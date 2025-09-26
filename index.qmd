@@ -22,4 +22,4 @@ Hello, I am Trevor Nederlof, a Senior Solutions Engineer at [Sourcegraph](https:
 
 To learn more about me, visit my [About page](/about.qmd).
 
-To learn more about the projects I'm working on and the technologies I'm interested in, visit my [thoughts feed](/thoughts.qmd).
+To learn more about the projects I'm working on and the technologies I'm interested in, checkout my [thoughts](/thoughts.qmd).
