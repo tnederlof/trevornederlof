@@ -18,8 +18,8 @@ email-obfuscation: javascript
 
 ## Welcome to my personal website!
 
-Hello, I am Trevor Nederlof, a Principal Solutions Architect at Posit (formerly RStudio), where I empower data science teams in organizations to collaborate and productionalize their data science workflows. I also enjoy exploring and pushing the boundaries of cloud-native technologies, especially Kubernetes.
+Hello, I am Trevor Nederlof, a Senior Solutions Engineer at [Sourcegraph](https://sourcegraph.com/), where I partner with software engineers at a variety of organizations to get the most out of [Amp](https://ampcode.com/), our agile coding tool.
 
-To learn more about me visit my [About page](/about.qmd).
+To learn more about me, visit my [About page](/about.qmd).
 
-To learn more about technologies I am interested in visit my [Blog feed](/blog.qmd).
+To learn more about the projects I'm working on and the technologies I'm interested in, visit my [thoughts feed](/thoughts.qmd).
