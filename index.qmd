@@ -22,7 +22,7 @@ email-obfuscation: javascript
 
 ## Welcome to my personal website!
 
-Hello, I am Trevor Nederlof, a Senior Solutions Engineer at [Sourcegraph](https://sourcegraph.com/), where I partner with software engineers at a variety of organizations to get the most out of [Amp](https://ampcode.com/), our agile coding tool.
+Hello, I am Trevor Nederlof, a Senior Solutions Engineer at [Sourcegraph](https://sourcegraph.com/), where I partner with software engineers at a variety of organizations to get the most out of [Amp](https://ampcode.com/), our agentic coding tool.
 
 To learn more about me, visit my [About page](/about.qmd).
 
