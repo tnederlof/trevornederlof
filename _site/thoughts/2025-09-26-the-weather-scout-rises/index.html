@@ -8,9 +8,9 @@
 
 <meta name="author" content="Trevor Nederlof">
 <meta name="dcterms.date" content="2025-09-26">
-<meta name="description" content="Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).">
+<meta name="description" content="Behind the scenes of creating The Weather Scout using Amp (an agentic coding tool from Sourcegraph).">
 
-<title>The Weather Scout Rises with Amp – Trevor Nederlof</title>
+<title>Building The Weather Scout with Amp – Trevor Nederlof</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -98,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/tnederlof"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://x.com/tnederlof"> <i class="bi bi-twitter" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -138,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The Weather Scout Rises with Amp</h1>
+<h1 class="title">Building The Weather Scout with Amp</h1>
   <div class="quarto-categories">
     <div class="quarto-category">amp</div>
     <div class="quarto-category">ai</div>
@@ -152,7 +152,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    <p>Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).</p>
+    <p>Behind the scenes of creating The Weather Scout using Amp (an agentic coding tool from Sourcegraph).</p>
   </div>
 </div>
 
@@ -162,7 +162,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p><a href="https://www.trevor.nederlof.me">Trevor Nederlof</a> </p>
+             <p><a href="https://www.trevornederlof.me">Trevor Nederlof</a> </p>
           </div>
   </div>
     
@@ -183,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
-<p><a href="https://theweatherscout.com">The Weather Scout</a> is an interactive site that allows users to scout likely weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using <a href="https://ampcode.com/">Amp</a> (Sourcegraph’s agentic coding tool), and this post details the process of the build. One interesting feature of <a href="https://ampcode.com/">Amp</a> is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized <a href="https://ampcode.com/">Amp</a> during the build.</p>
+<p><a href="https://theweatherscout.com">The Weather Scout</a> is an interactive site that allows users to scout typical weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using <a href="https://ampcode.com/">Amp</a> (Sourcegraph’s agentic coding tool), and this post details the process of the build. One interesting feature of <a href="https://ampcode.com/">Amp</a> is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized <a href="https://ampcode.com/">Amp</a> during the build.</p>
 <p>My biggest ah-ha moments were:</p>
 <ol type="1">
 <li><a href="#architecture-advice">Architecture advice, exploration and problem solving with the oracle</a></li>
@@ -303,14 +303,14 @@ Figure&nbsp;4: Amp creating its own AGENTS.md file with build and test instructi
 </section>
 <section id="troubleshooting-with-playwright-mcp" class="level4">
 <h4 class="anchored" data-anchor-id="troubleshooting-with-playwright-mcp">Troubleshooting with Playwright MCP</h4>
-<p>I experimented with various prompting techniques to get <a href="https://ampcode.com/">Amp</a> to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using <code>just run</code>, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it’s a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an <a href="https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145">example thread</a> where I had it fix a search issue.</p>
+<p>I experimented with various prompting techniques to get <a href="https://ampcode.com/">Amp</a> to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using <code>just run</code>, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it’s a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an <a href="https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145">example thread</a> where I had it fix a search issue (the normalization logic was later thrown out due to complexity on a refactor).</p>
 <div id="fig-playwright" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-playwright-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="playwright-example.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playwright-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Amp using Playwright MCP to troubleshoot and test fixes in UI
+Figure&nbsp;5: Amp using Playwright MCP to troubleshoot and test fixes in the UI
 </figcaption>
 </figure>
 </div>
@@ -379,7 +379,12 @@ Figure&nbsp;8: New charts Amp created from the sketch
 <p>Deployment was pretty straight forward because I spent so much time upfront with <a href="https://ampcode.com/">Amp</a> planning the Architecture and integrating services from the beginning, I already knew how services would be hosted on Cloudflare, and the raster data was already in R2 buckets all along. I had <a href="https://ampcode.com/">Amp</a> help me create a checklist (with the Oracle’s help, of course) of items to prepare for deployment, including Cloudflare configuration, CI/CD pipelines, a release strategy, and additional security/cost implementations.</p>
 <p>The deployment plan wasn’t the type that I could have the main agent execute, as much of the setup was in Cloudflare, including adding secrets, etc. Instead, I had the Oracle assign roles to each step as either human or agent, and I went through it step by step. There were a few steps I could automate with <a href="https://ampcode.com/">Amp</a>, such as writing the actual GitHub actions .yaml files. It still took me some time to get this all right but having <a href="https://ampcode.com/">Amp</a> to ask when I got stuck sped things up.</p>
 <p>The list of enhancements for a project like this is always long, but it’s a good start.</p>
-<p>You can check out the website live now a https://theweatherscout.com</p>
+<p>You can check out the website live at <a href="https://theweatherscout.com">https://theweatherscout.com</a> I hope you learned something from my journey, feel free to reach out <a href="https://x.com/tnederlof">on X</a> or email me at <script type="text/javascript">
+<!--
+h='&#104;&#x65;&#x79;&#46;&#x63;&#x6f;&#x6d;';a='&#64;';n='&#116;&#114;&#x65;&#118;&#x6f;&#114;&#46;&#110;&#x65;&#100;&#x65;&#114;&#108;&#x6f;&#102;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>trevor.nederlof at hey dot com</noscript></p>
 </section>
 </section>
 <section id="learnings" class="level2">

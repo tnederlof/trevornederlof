@@ -13,6 +13,10 @@ about:
     - icon: envelope-at
       text: Email
       href: mailto:trevor.nederlof@hey.com
+    - href: "https://x.com/tnederlof"
+      icon: twitter
+      text: X
+
 email-obfuscation: javascript
 ---
 

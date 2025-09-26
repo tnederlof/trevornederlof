@@ -1,7 +1,7 @@
 ---
-title: "The Weather Scout Rises with Amp"
+title: "Building The Weather Scout with Amp"
 description: |
-    Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).
+    Behind the scenes of creating The Weather Scout using Amp (an agentic coding tool from Sourcegraph).
 date: "2025-09-26"
 categories:
   - amp
@@ -19,7 +19,7 @@ appendix-style: none #(default, plain, none)
 
 ## TL;DR
 
-[The Weather Scout](https://theweatherscout.com) is an interactive site that allows users to scout likely weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using [Amp](https://ampcode.com/) (Sourcegraph's agentic coding tool), and this post details the process of the build. One interesting feature of [Amp](https://ampcode.com/) is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized [Amp](https://ampcode.com/) during the build.
+[The Weather Scout](https://theweatherscout.com) is an interactive site that allows users to scout typical weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using [Amp](https://ampcode.com/) (Sourcegraph's agentic coding tool), and this post details the process of the build. One interesting feature of [Amp](https://ampcode.com/) is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized [Amp](https://ampcode.com/) during the build.
 
 My biggest ah-ha moments were:
 
@@ -123,9 +123,9 @@ For the rest of the development of The Weather Scout, I planned on using [Amp](h
 
 #### Troubleshooting with Playwright MCP
 
-I experimented with various prompting techniques to get [Amp](https://ampcode.com/) to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using `just run`, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it's a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an [example thread](https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145) where I had it fix a search issue.
+I experimented with various prompting techniques to get [Amp](https://ampcode.com/) to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using `just run`, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it's a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an [example thread](https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145) where I had it fix a search issue (the normalization logic was later thrown out due to complexity on a refactor).
 
-![Amp using Playwright MCP to troubleshoot and test fixes in UI](playwright-example.png){#fig-playwright fig-align="left" width=800}
+![Amp using Playwright MCP to troubleshoot and test fixes in the UI](playwright-example.png){#fig-playwright fig-align="left" width=800}
 
 [Amp](https://ampcode.com/) had incorrectly wired up the search box to the interactive map, and markers were not placed correctly on map click. Once [Amp](https://ampcode.com/) resolved these issues, it appeared that data issues persisted. [Amp](https://ampcode.com/) identified the issue as the worker service shutting down with an error in the logs. Before proceeding, it was clear that the worker needed to be running correctly. It made suggestions, but ultimately, I had to learn more about `wrangler` and the Worker/R2 infrastructure to determine the correct configuration settings.
 
@@ -176,7 +176,8 @@ The deployment plan wasn't the type that I could have the main agent execute, as
 
 The list of enhancements for a project like this is always long, but it's a good start.
 
-You can check out the website live now a https://theweatherscout.com
+You can check out the website live at [https://theweatherscout.com](https://theweatherscout.com)
+I hope you learned something from my journey, feel free to reach out [on X](https://x.com/tnederlof) or email me at [trevor.nederlof@hey.com](mailto:trevor.nederlof@hey.com)
 
 ## Learnings
 
