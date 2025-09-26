@@ -57,6 +57,9 @@ Fast forward to 2025: agentic coding tools have transformed not only how I code 
 
 [Amp](https://ampcode.com/) is an agentic coding tool that leverages some of the best models available, specifically Sonnet 4 as the primary model and OpenAI's o3 for more complex reasoning tasks. It also includes a server component, enabling users to view all threads (conversations) on the web. In this post, I will link to several of those threads for anyone interested in seeing the specific prompts I used with [Amp](https://ampcode.com/). Typically, I utilize [Amp](https://ampcode.com/) to "consult the Oracle," which activates the o3 model for architecture advice, addressing difficult bugs, and planning projects. Once that stage is complete, I switch to the main model, Sonnet 4, for implementation.
 
+![Amp provides TUI running in my terminal, VS Code extension also available](amp-terminal.png){#fig-amp-terminal fig-align="left" width=800}
+
+
 ## Building The Weather Scout
 
 A couple of years ago, I discovered the [PRISM group's 30-year normals data](https://prism.oregonstate.edu/normals/), which utilizes NOAA climate normals and other inputs to create 800-meter grids across the United States. I realized that this data could be a game-changer for The Weather Scout if I ever decided to build another version.
