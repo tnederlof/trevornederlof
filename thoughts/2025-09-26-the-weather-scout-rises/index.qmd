@@ -2,7 +2,7 @@
 title: "The Weather Scout Rises with Amp"
 description: |
     Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).
-date: "2025-09-14"
+date: "2025-09-26"
 categories:
   - amp
   - ai
