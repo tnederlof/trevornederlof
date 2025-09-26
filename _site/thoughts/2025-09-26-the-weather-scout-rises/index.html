@@ -184,10 +184,26 @@ ul.task-list li input[type="checkbox"] {
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
 <p><a href="https://theweatherscout.com">The Weather Scout</a> is an interactive site that allows users to scout likely weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using <a href="https://ampcode.com/">Amp</a> (Sourcegraph’s agentic coding tool), and this post details the process of the build. One interesting feature of <a href="https://ampcode.com/">Amp</a> is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized <a href="https://ampcode.com/">Amp</a> during the build.</p>
+<p>My biggest ah-ha moments were:</p>
+<ol type="1">
+<li><a href="#architecture-advice">Architecture advice, exploration and problem solving with the oracle</a></li>
+<li><a href="#troubleshooting-with-playwright-mcp">Troubleshooting with Playwright MCP</a></li>
+<li><a href="#ui-enhancements">UI overhaul from a Figma sketch</a></li>
+</ol>
+<div id="fig-weather-scout-homepage" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-weather-scout-homepage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="weather-scout-homepage.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-weather-scout-homepage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The Weather Scout homepage
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>We are currently experiencing a golden age for ideas. Just a year ago, many thoughts would come to mind, but few were developed due to the time commitment required. The advent of agentic coding tools (like Amp, Claude Code, Codex, etc.) has significantly changed the landscape of what is possible and what can actually be created.</p>
+<p>We are in a golden age for ideas. Just a year ago, many projects would come to mind, but few were developed due to the time commitment required. The advent of agentic coding tools (like Amp, Claude Code, Codex, etc.) has significantly changed the landscape of what is possible and what can actually be created.</p>
 <p>Over the past few weeks, I have rebuilt The Weather Scout, an interactive web app for exploring typical climate patterns across the US, from the ground up. Although I had long wanted to undertake this project, I never found the time to do it until now. It has been thrilling to bring it to life rapidly using <a href="https://ampcode.com/">Amp</a>. In this post, I will share lessons learned and take you along on my journey.</p>
 </section>
 <section id="background" class="level2">
@@ -214,6 +230,16 @@ ul.task-list li input[type="checkbox"] {
 <section id="architecture-advice" class="level3">
 <h3 class="anchored" data-anchor-id="architecture-advice">Architecture Advice</h3>
 <p>I had a clear vision for the user experience I wanted to design: it needed to be simple and intuitive while keeping costs as low as possible. <a href="https://ampcode.com/">Amp</a> offered valuable guidance on architectural options based on these requirements. In <a href="https://ampcode.com/threads/T-adf71bfd-4371-429e-bb9c-3a7ae268107f">this thread</a>, I explored various architecture options by providing detailed prompts and consulting the oracle to utilize the O3 deep reasoning model. <a href="https://ampcode.com/">Amp</a> was especially effective at identifying services with generous free or low-cost tiers, which helped maintain low costs once I made it clear that this was a top priority.</p>
+<div id="fig-architecture" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="architecture-example.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Architecture back and forth example
+</figcaption>
+</figure>
+</div>
 <p>To store common Points of Interest (POI) and location names, I would need a PostgreSQL database, which the search function would use to plot coordinates on a map and sample climate data from raster data (PRISM climate normals) stored in Cloudflare’s R2 buckets.</p>
 <p>Given my familiarity with both, a React/TypeScript front end paired with a FastAPI/Python backend made the most sense to me. However, <a href="https://ampcode.com/">Amp</a> provided some interesting recommendations regarding the use of Cloudflare Workers, which serve as APIs on the edge and offer significant speed advantages. The current plan is to build the following components:</p>
 <ul>
@@ -240,7 +266,17 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="first-build" class="level4">
 <h4 class="anchored" data-anchor-id="first-build">First Build</h4>
-<p>After lots of preparation, it was time to make The Weather Scout finally come alive. I prompted <a href="https://ampcode.com/">Amp</a> to execute the plan outlined in <code>BUILD_TODO.md</code> and let it run through the initial build. First, I noticed some VS Code IDE diagnostic errors in the TypeScript codebase, so I started a fresh thread and had <a href="https://ampcode.com/">Amp</a> quickly resolve those issues. <a href="https://ampcode.com/">Amp</a> can retrieve diagnostic information from the IDE, which makes it efficient at identifying and fixing errors like this. I was able to run the frontend and workers locally for the first time and visit the URL in my browser at a localhost address, exciting!</p>
+<p>After lots of preparation, it was time to make The Weather Scout finally come alive. I prompted <a href="https://ampcode.com/">Amp</a> to execute each phase in <code>BUILD_TODO.md</code> one by one. I find it easier to keep the context window under control and review changes when I instruct the agent to execute sections at a time. Next, I noticed some VS Code IDE diagnostic errors in the TypeScript codebase, so I started a fresh thread and had <a href="https://ampcode.com/">Amp</a> quickly resolve those issues. <a href="https://ampcode.com/">Amp</a> can retrieve diagnostic information from the IDE, which makes it efficient at identifying and fixing errors like this. I was able to run the frontend and workers locally for the first time and visit the URL in my browser at a localhost address, exciting!</p>
+<div id="fig-execute-plan" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-execute-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="execute-plan-example.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-execute-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Executing a plan section by section in separate threads to manage context
+</figcaption>
+</figure>
+</div>
 <p>Unfortunately, there were several apparent issues:</p>
 <ul>
 <li>No basemap in the JavaScript map</li>
@@ -254,11 +290,31 @@ ul.task-list li input[type="checkbox"] {
 <section id="agents.md" class="level4">
 <h4 class="anchored" data-anchor-id="agents.md">AGENTS.md</h4>
 <p>For the rest of the development of The Weather Scout, I planned on using <a href="https://ampcode.com/">Amp</a> in many different ways. To make <a href="https://ampcode.com/">Amp</a> more effective, it is imperative to have an <code>AGENTS.md</code> file to list build, test, and architecture information. The contents of this file are added to the context of each thread, which saves each thread from trying the wrong build step and wasting valuable time/tokens. First, I asked <a href="https://ampcode.com/">Amp</a> to generate one on its own, which always feels a bit circular, but it <a href="https://ampcode.com/threads/T-cf0bc424-ea5e-43c3-bf0f-3bead535228b">did a great job</a>. I edited a few works and was ready to start diving into further troubleshooting and refinement.</p>
+<div id="fig-agentsmd" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agentsmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="agents-md.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agentsmd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Amp creating its own AGENTS.md file with build and test instructions
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="data-troubleshooting" class="level4">
-<h4 class="anchored" data-anchor-id="data-troubleshooting">Data Troubleshooting</h4>
+<section id="troubleshooting-with-playwright-mcp" class="level4">
+<h4 class="anchored" data-anchor-id="troubleshooting-with-playwright-mcp">Troubleshooting with Playwright MCP</h4>
 <p>I experimented with various prompting techniques to get <a href="https://ampcode.com/">Amp</a> to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using <code>just run</code>, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it’s a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an <a href="https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145">example thread</a> where I had it fix a search issue.</p>
-<p><a href="https://ampcode.com/">Amp</a> had incorrectly wired up the search box to the interactive map, and markers were not placed correctly on map click. Once <a href="https://ampcode.com/">Amp</a> resolved these issues, it appeared that data issues persisted. <a href="https://ampcode.com/">Amp</a> identified the issue as the worker service shutting down with an error in the logs. Before proceeding, it was clear that the worker needed to be running correctly. <a href="https://ampcode.com/">Amp</a> also suggested to either use local data with the <code>--local</code> flag passed to <code>wrangler</code> or use <code>--remote</code> to use the actual R2 bucket. Since I had already loaded the data and wanted to ensure the R2 buckets in Cloudflare were actually working, I opted for the <code>--remote</code> option. Getting the <code>wrangler</code> commands right so that it would start properly took more time than I wanted it to, and unfortunately, <a href="https://ampcode.com/">Amp</a> was only of limited use. It made suggestions, but ultimately, I had to learn more about <code>wrangler</code> and the Worker/R2 infrastructure to determine the correct configuration settings.</p>
+<div id="fig-playwright" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-playwright-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="playwright-example.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-playwright-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Amp using Playwright MCP to troubleshoot and test fixes in UI
+</figcaption>
+</figure>
+</div>
+<p><a href="https://ampcode.com/">Amp</a> had incorrectly wired up the search box to the interactive map, and markers were not placed correctly on map click. Once <a href="https://ampcode.com/">Amp</a> resolved these issues, it appeared that data issues persisted. <a href="https://ampcode.com/">Amp</a> identified the issue as the worker service shutting down with an error in the logs. Before proceeding, it was clear that the worker needed to be running correctly. It made suggestions, but ultimately, I had to learn more about <code>wrangler</code> and the Worker/R2 infrastructure to determine the correct configuration settings.</p>
 <p>Finally the frontend was working with the worker but graphs were still blank. I provided a detailed description of the actions taken to reproduce the expected behavior, along with screenshots. <a href="https://ampcode.com/">Amp</a> <a href="https://ampcode.com/threads/T-91486df7-b836-49b9-9461-55434469d893">traced the issue</a> to how the data was being sampled from the tiles we generated earlier in the process. The basic version of the application was working!</p>
 </section>
 </section>
@@ -273,22 +329,22 @@ ul.task-list li input[type="checkbox"] {
 <li>Many locations were not being found at all</li>
 <li>The information provided in the dropdown was not always helpful (“POI”)</li>
 </ul>
-<p>I have prior experience with geospatial web applications, and I knew that Google Maps had spoiled users to expecting the same quality of search suggestions. I began to think that implementing my own search with a database of locations was the wrong approach; there is simply no way the quality could match that of a service like Google Maps. I turned to the oracle in <a href="https://ampcode.com/">Amp</a> to <a href="https://ampcode.com/threads/T-8e2e41c4-0fc2-4855-9477-2ff99cdc4bd1">canvas the different geocoding + search API services</a> and present recommendations, knowing I still wanted to keep costs low. Google Maps was on the list, but I quickly ruled it out due to cost. The oracle suggested Mapbox’s Search API service, which offers a generous free tier that should suffice given visitor expectations.</p>
-<p>Next, I turned to <a href="https://ampcode.com/">Amp</a> to weigh the pros and cons of this decision to replace the current search with Mapbox. The pros outweighed the cons. I could eliminate Supabase/PostgreSQL, provide users with a superior search experience in terms of both accuracy and speed, and reduce the overall complexity of the code base.</p>
+<p>I have prior experience with geospatial web applications, and I knew that Google Maps had spoiled users to expecting the same quality of search suggestions. I began to think that implementing my own search with a database of locations was the wrong approach; there is simply no way the quality could match that of a service like Google Maps. I turned to the oracle in <a href="https://ampcode.com/">Amp</a> to <a href="https://ampcode.com/threads/T-8e2e41c4-0fc2-4855-9477-2ff99cdc4bd1">canvas the different geocoding + search API services</a> and present recommendations, knowing I still wanted to keep costs low. Google Maps was on the list, but I quickly ruled it out due to cost. The oracle suggested Mapbox’s Search API service, which offers a generous free tier that should suffice given visitor expectations. The pros outweighed the cons. I could eliminate Supabase/PostgreSQL, provide users with a superior search experience in terms of both accuracy and speed, and reduce the overall complexity of the code base.</p>
 </section>
 <section id="adding-mapbox" class="level4">
 <h4 class="anchored" data-anchor-id="adding-mapbox">Adding MapBox</h4>
-<p>With the decision made, the next step was, as always, to consult the oracle to create a comprehensive implementation plan, supplying it with links to Mapbox search API documentation. I went through a couple of iterations after I told <a href="https://ampcode.com/">Amp</a> it doesn’t need to be backwards compatible (this removed complexity) and to map out the complete removal of Supabase. One interesting part of the plan was the setting of <code>poi_categories</code> and <code>poi_categories_exclusions</code>. Initially, I liked the idea of steering the search results to a specific type of POI, such as mountains or lakes. However, I realized the categories it generated may not be correct. I found the Mapbox API endpoint that enumerates all the Mapbox POI categories and asked <a href="https://ampcode.com/">Amp</a> to cross-reference. Indeed, some categories were fabricated. I went through it carefully to ensure only legitimate categories were entered.</p>
-<p>With great excitement, knowing how much of a user improvement this would be, I started a new thread and let <a href="https://ampcode.com/">Amp</a> go to work executing the lengthy plan. From the first testing, the search worked like a dream; the results were so fast and helpful. However, upon testing more locations, I realized that some places I expected to be available were either not returning at all or returning to other countries. In the initial plan <a href="https://ampcode.com/">Amp</a> suggested constraining the Mapbox API to only return results within the US, which puzzled us both. After consulting with the oracle, <a href="https://ampcode.com/">Amp</a> finally figured out that the setting <code>MAPBOX_COUNTRY_FILTER = "us"</code> actually had to be <code>MAPBOX_COUNTRY_FILTER = "US"</code>, with the capitalized <code>US</code>. I was so happy for the oracle in that moment, I know from experience that it is the kind of bug that can drive a developer crazy and hold up progress.</p>
-<p>Search results were supposedly limited to the US, but some obvious locations were still randomly not returning any results. Puzzled I asked <a href="https://ampcode.com/">Amp</a> and it went about systematically troubleshooting:</p>
-<ul>
-<li>Use <code>just run</code> to start podman compose</li>
-<li>Accessed <code>localhost</code> in the browser</li>
-<li>Tried several search terms and recorded their results, including screenshots</li>
-<li>Check the browser console for any errors</li>
-<li>Checked the podman logs for worker errors</li>
-</ul>
-<p>It was in the worker logs that some 4XX code errors were spotted, indicating that the parameters being sent to Mapbox in some cases were incorrect. <a href="https://ampcode.com/">Amp</a> had a theory, so it continued to troubleshoot by removing various Mapbox API parameters one by one to see the results. Sure enough, by removing the <code>poi_categories</code> and <code>poi_categories_exclusions</code> categories, everything worked as expected. The results seemed so good without them specified, it seemed prudent to remove them and continue on. At last, the search was working!</p>
+<p>With the decision made, the next step was, as always, to consult the oracle to create a comprehensive implementation plan, supplying it with links to Mapbox search API documentation. I went through a couple of iterations after I told <a href="https://ampcode.com/">Amp</a> it doesn’t need to be backwards compatible (this removed complexity) and to map out the complete removal of Supabase.</p>
+<div id="fig-mapbox-search" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mapbox-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="search-example.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mapbox-search-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Mapbox search finding the right location fast
+</figcaption>
+</figure>
+</div>
+<p>From the first testing, the search worked like a dream; the results were so fast and helpful. However, upon testing more locations, I realized that some places I expected to be available were either not returning at all or returning to other countries. In the initial plan <a href="https://ampcode.com/">Amp</a> suggested constraining the Mapbox API to only return results within the US, which puzzled us both. After consulting with the oracle, <a href="https://ampcode.com/">Amp</a> finally figured out that the setting <code>MAPBOX_COUNTRY_FILTER = "us"</code> actually had to be <code>MAPBOX_COUNTRY_FILTER = "US"</code>, with the capitalized <code>US</code>. I was so happy for the oracle in that moment, I know from experience that it is the kind of bug that can drive a developer crazy and hold up progress.</p>
 <p>The last search-related task I wanted to refine is the type of information displayed in the search suggestions. I knew the Mapbox must be returning some details, such as city, state, and type of POI, etc. Still, rather than parsing through examples and documentation, I asked <a href="https://ampcode.com/">Amp</a> to <a href="https://ampcode.com/threads/T-0f229ccc-a1ce-4ebb-a6fa-126b78d10386">restructure how the search results are displayed</a>, using information from Mapbox, and show me the totality of available information. After a couple of threads, search items were richer, and I was happy with the experience.</p>
 </section>
 <section id="ui-enhancements" class="level4">
@@ -296,19 +352,39 @@ ul.task-list li input[type="checkbox"] {
 <p>When I had the oracle write the very first plan, I was focused on the architecture and technology, and I omitted much information about what I expected the UI to look like. The only information <a href="https://ampcode.com/">Amp</a> had to go on is that I wanted a location search box, a month selector, an interactive map, and the climate data for the selected location displayed. It did an excellent job bringing the application to life with minimal guidance in that respect, but I had some changes in mind before sharing it with other users.</p>
 <p>First, I wanted to overhaul the general UI to make it consistent and modern. The oracle is great for this sort of research. I often ask it to research a bunch of directions and make a recommendation. That way I can read through options (some of which I may have no prior experience with) and make a fact based decision before continuing. In this case <a href="https://ampcode.com/">Amp</a> <a href="https://ampcode.com/threads/T-299b7d89-9d38-4a53-b511-613e382a1e6a">provided a good recommendation</a> that I proceeded with.</p>
 <p>Next, I turned to redesigning the climate data display. It may sound almost unbelievable, but simply drawing a mockup of the desired UI state and providing it to <a href="https://ampcode.com/">Amp</a> as an image is often a good strategy. After creating a crude mockup in Figma of what I wanted the UI to look like under the map (data visualization part), I sent <a href="https://ampcode.com/">Amp</a> a <a href="https://ampcode.com/threads/T-eff01c26-b804-41b9-80c4-26c2eaa2c2e5">screenshot of the current state and my mockup</a>, asking the Oracle to create an implementation plan once again. Despite knowing that people had done this, I was still blown away by the plan, which came back to implement my vision; it was even better than I had expected. <a href="https://ampcode.com/">Amp</a> inferred some design decisions that I had in my head, but didn’t spend much time putting in the image, like a dashed vertical line to mark the month.</p>
-<p>I went through a couple of threads with <a href="https://ampcode.com/">Amp</a>, tweaking the UI to make it more user-friendly with information about the location. It also suggested that the elevation would be helpful for the user, which I agreed with, but I didn’t want to spend a lot of money on yet another API request. Helpfully, the oracle suggested two options: AWS Terrain Tiles, which are freely hosted on S3, and MapTiler’s elevation API service. To avoid any data mismatch issues, I opted to <a href="https://ampcode.com/threads/T-7c368c25-fd44-4b76-bd19-52c827c20d3c">use MapTiler’s elevation API</a>, which would ensure that the elevations on the base map matched. With no objections remaining, I had <a href="https://ampcode.com/">Amp</a> add that information for the user, neat!</p>
+<div id="fig-ui-transform" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ui-transform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="old_to_new_ui.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ui-transform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Original vs desired state sketched in Figma
+</figcaption>
+</figure>
+</div>
+<div id="fig-new-charts" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-new-charts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ui-after.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-new-charts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: New charts Amp created from the sketch
+</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="deployment" class="level3">
 <h3 class="anchored" data-anchor-id="deployment">Deployment</h3>
-<p>Deployment was the easiest part of getting The Weather Scout off the ground. A sentence I never thought I would type, as the opposite was true in most past projects. Because I spent so much time upfront with <a href="https://ampcode.com/">Amp</a> planning the Architecture and integrating services from the beginning, I already knew how services would be hosted on Cloudflare, and the raster data was already in R2 buckets all along. I had <a href="https://ampcode.com/">Amp</a> help me create a checklist (with the Oracle’s help, of course) of items to prepare for deployment, including Cloudflare configuration, CI/CD pipelines, a release strategy, and additional security/cost implementations.</p>
+<p>Deployment was pretty straight forward because I spent so much time upfront with <a href="https://ampcode.com/">Amp</a> planning the Architecture and integrating services from the beginning, I already knew how services would be hosted on Cloudflare, and the raster data was already in R2 buckets all along. I had <a href="https://ampcode.com/">Amp</a> help me create a checklist (with the Oracle’s help, of course) of items to prepare for deployment, including Cloudflare configuration, CI/CD pipelines, a release strategy, and additional security/cost implementations.</p>
 <p>The deployment plan wasn’t the type that I could have the main agent execute, as much of the setup was in Cloudflare, including adding secrets, etc. Instead, I had the Oracle assign roles to each step as either human or agent, and I went through it step by step. There were a few steps I could automate with <a href="https://ampcode.com/">Amp</a>, such as writing the actual GitHub actions .yaml files. It still took me some time to get this all right but having <a href="https://ampcode.com/">Amp</a> to ask when I got stuck sped things up.</p>
-<p>The list of enhancements for a project like this is always long, but it’s a good start. You can check out the website live now a https://theweatherscout.com</p>
+<p>The list of enhancements for a project like this is always long, but it’s a good start.</p>
+<p>You can check out the website live now a https://theweatherscout.com</p>
 </section>
 </section>
 <section id="learnings" class="level2">
 <h2 class="anchored" data-anchor-id="learnings">Learnings</h2>
-<p>Taking on a project from start to finish using <a href="https://ampcode.com/">Amp</a> was a rewarding experience. Using these agentic tools is a skill that needs to be cultivated. We are only in the early innings, I am eager to continue building. My biggest takeaways are to start new threads more often, slow down and make deliberate architectural decisions, and to have the models check their own work continuously. Sometimes the models produce precisely what you are looking for, and sometimes they produce terrible code. It’s a highly jagged surface area, so you need to always be on your toes and supervising. Still, I created this site in significantly less time than if I were coding by hand.</p>
+<p>Taking on a project from start to finish using <a href="https://ampcode.com/">Amp</a> was a rewarding experience. Using these agentic tools is a skill that needs to be cultivated. We are only in the early innings and I am eager to continue building. My biggest takeaways are to start new threads more often, slow down and make deliberate architectural decisions, and to have the models check their own work continuously. Sometimes the models produce precisely what you are looking for, and sometimes they produce terrible code. It’s a highly irregular, you always need to be on your toes and supervising. Still, I created this site in significantly less time than if I were coding by hand and learned along the way.</p>
 
 
 </section>
