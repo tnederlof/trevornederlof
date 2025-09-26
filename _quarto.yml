@@ -12,8 +12,8 @@ website:
     right:
       - href: about.qmd
         text: About
-      - href: blog.qmd
-        text: Blog
+      - href: thoughts.qmd
+        text: Thoughts
       - href: "https://github.com/tnederlof/"
         icon: github
       - href: "https://www.linkedin.com/in/trevor-nederlof/"

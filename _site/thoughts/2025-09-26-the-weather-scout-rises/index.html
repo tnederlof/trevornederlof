@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Trevor Nederlof">
+<meta name="dcterms.date" content="2025-09-26">
+<meta name="description" content="Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).">
+
+<title>The Weather Scout Rises with Amp – Trevor Nederlof</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-672a9d6f2a875e614c0ac025ca3534ad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Trevor Nederlof</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../thoughts.html"> 
+<span class="menu-text">Thoughts</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tnederlof/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/trevor-nederlof/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/tnederlof"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">TL;DR</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#amp" id="toc-amp" class="nav-link" data-scroll-target="#amp">Amp</a></li>
+  <li><a href="#building-the-weather-scout" id="toc-building-the-weather-scout" class="nav-link" data-scroll-target="#building-the-weather-scout">Building The Weather Scout</a>
+  <ul class="collapse">
+  <li><a href="#architecture-advice" id="toc-architecture-advice" class="nav-link" data-scroll-target="#architecture-advice">Architecture Advice</a></li>
+  <li><a href="#building" id="toc-building" class="nav-link" data-scroll-target="#building">Building</a></li>
+  <li><a href="#refinement" id="toc-refinement" class="nav-link" data-scroll-target="#refinement">Refinement</a></li>
+  <li><a href="#deployment" id="toc-deployment" class="nav-link" data-scroll-target="#deployment">Deployment</a></li>
+  </ul></li>
+  <li><a href="#learnings" id="toc-learnings" class="nav-link" data-scroll-target="#learnings">Learnings</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Weather Scout Rises with Amp</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">amp</div>
+    <div class="quarto-category">ai</div>
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">agent</div>
+    <div class="quarto-category">frontend</div>
+    <div class="quarto-category">gis</div>
+    <div class="quarto-category">weather</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Behind the scenes of creating The Weather Scout using Amp (agentic coding tool from Sourcegraph).</p>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.trevor.nederlof.me">Trevor Nederlof</a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 26, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
+<p><a href="https://theweatherscout.com">The Weather Scout</a> is an interactive site that allows users to scout likely weather conditions across the US based on 30-year climate normal data and models. I recently rebuilt the site using <a href="https://ampcode.com/">Amp</a> (Sourcegraph’s agentic coding tool), and this post details the process of the build. One interesting feature of <a href="https://ampcode.com/">Amp</a> is that each thread (conversation) is saved on the server and can be shared easily. Throughout this post, I will include some of my actual threads so you can see how I prompted the models and utilized <a href="https://ampcode.com/">Amp</a> during the build.</p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>We are currently experiencing a golden age for ideas. Just a year ago, many thoughts would come to mind, but few were developed due to the time commitment required. The advent of agentic coding tools (like Amp, Claude Code, Codex, etc.) has significantly changed the landscape of what is possible and what can actually be created.</p>
+<p>Over the past few weeks, I have rebuilt The Weather Scout, an interactive web app for exploring typical climate patterns across the US, from the ground up. Although I had long wanted to undertake this project, I never found the time to do it until now. It has been thrilling to bring it to life rapidly using <a href="https://ampcode.com/">Amp</a>. In this post, I will share lessons learned and take you along on my journey.</p>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>I enjoy backpacking and the planning that comes with it, which involves a lot of preparation. <a href="https://andrewskurka.com/about-andrew-skurka/">Andrew Skurka</a>, recognized as Adventurer of the Year by both Outside and National Geographic, introduced me to a <a href="https://andrewskurka.com/planning-course/">methodology for organizing and planning these trips</a>. One valuable tip he shared was to use the <a href="https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals">30-Year Climate Normals from NOAA</a> to understand the likely weather at any given location. However, there were several challenges with this approach:</p>
+<ol type="1">
+<li>Accessing and using the data was user-unfriendly.</li>
+<li>The data was only available from certain weather stations, which led to a lot of guesswork.</li>
+</ol>
+<p>When I discovered that the data was available on an FTP server, my tech-savvy brain thought there must be a better way to handle it. That’s when The Weather Scout was born.</p>
+<p>Over the years, The Weather Scout has existed in various formats, but the architecture never felt quite right, and it was too costly to keep running indefinitely. Each version was enjoyable to build and attracted some users, but eventually, I had to shut them down because I didn’t want to bear the expenses.</p>
+<p>In 2018, I created the first version of The Weather Scout as a <a href="https://shiny.posit.co/">Shiny application</a> running on R code, which I was working with at the time. While it had advantages that allowed me to perform calculations on the server for accurate results, it proved to be not scalable, prone to errors, and too expensive to maintain in the long run.</p>
+<p>In 2020, I developed the second version of The Weather Scout with the backend written in <a href="https://elixir-lang.org/">Elixir</a> (a language I was learning) using the <a href="https://www.phoenixframework.org/">Phoenix framework</a>, while the frontend was built with React. This version was significantly more scalable, efficient, and user-friendly. However, due to the high costs associated with running the PostgreSQL and Elixir backend, I ultimately decided to decommission it. I received several emails over the years requesting its return, with some even offering to donate funds, but it wasn’t enough to sustain the project.</p>
+<p>Fast forward to 2025: agentic coding tools have transformed not only how I code but also the types of projects I can pursue. I initially began using Anthropic’s <a href="https://www.anthropic.com/claude-code">Claude Code</a>, which yielded great success. Following that, I discovered Sourcegraph’s <a href="https://ampcode.com/">Amp</a> and was impressed by its performance and user experience. This excitement led to discussions with the team at Sourcegraph, and I eventually accepted a position there as a Senior Solutions Engineer.</p>
+</section>
+<section id="amp" class="level2">
+<h2 class="anchored" data-anchor-id="amp">Amp</h2>
+<p><a href="https://ampcode.com/">Amp</a> is an agentic coding tool that leverages some of the best models available, specifically Sonnet 4 as the primary model and OpenAI’s o3 for more complex reasoning tasks. It also includes a server component, enabling users to view all threads (conversations) on the web. In this post, I will link to several of those threads for anyone interested in seeing the specific prompts I used with <a href="https://ampcode.com/">Amp</a>. Typically, I utilize <a href="https://ampcode.com/">Amp</a> to “consult the Oracle,” which activates the o3 model for architecture advice, addressing difficult bugs, and planning projects. Once that stage is complete, I switch to the main model, Sonnet 4, for implementation.</p>
+</section>
+<section id="building-the-weather-scout" class="level2">
+<h2 class="anchored" data-anchor-id="building-the-weather-scout">Building The Weather Scout</h2>
+<p>A couple of years ago, I discovered the <a href="https://prism.oregonstate.edu/normals/">PRISM group’s 30-year normals data</a>, which utilizes NOAA climate normals and other inputs to create 800-meter grids across the United States. I realized that this data could be a game-changer for The Weather Scout if I ever decided to build another version.</p>
+<p>Another crucial component was geocoding search terms into coordinates to retrieve weather information. While there are well-known services for this, such as Google Maps and Mapbox, I was worried about the associated costs, as my main goal for this rebuild was to reduce expenses. Therefore, I reached out to <a href="https://ampcode.com/">Amp</a> for some advice.</p>
+<section id="architecture-advice" class="level3">
+<h3 class="anchored" data-anchor-id="architecture-advice">Architecture Advice</h3>
+<p>I had a clear vision for the user experience I wanted to design: it needed to be simple and intuitive while keeping costs as low as possible. <a href="https://ampcode.com/">Amp</a> offered valuable guidance on architectural options based on these requirements. In <a href="https://ampcode.com/threads/T-adf71bfd-4371-429e-bb9c-3a7ae268107f">this thread</a>, I explored various architecture options by providing detailed prompts and consulting the oracle to utilize the O3 deep reasoning model. <a href="https://ampcode.com/">Amp</a> was especially effective at identifying services with generous free or low-cost tiers, which helped maintain low costs once I made it clear that this was a top priority.</p>
+<p>To store common Points of Interest (POI) and location names, I would need a PostgreSQL database, which the search function would use to plot coordinates on a map and sample climate data from raster data (PRISM climate normals) stored in Cloudflare’s R2 buckets.</p>
+<p>Given my familiarity with both, a React/TypeScript front end paired with a FastAPI/Python backend made the most sense to me. However, <a href="https://ampcode.com/">Amp</a> provided some interesting recommendations regarding the use of Cloudflare Workers, which serve as APIs on the edge and offer significant speed advantages. The current plan is to build the following components:</p>
+<ul>
+<li>React Frontend</li>
+<li>Cloudflare Worker</li>
+<li>FastAPI Backend</li>
+</ul>
+<section id="plan-iterate-execute" class="level4">
+<h4 class="anchored" data-anchor-id="plan-iterate-execute">Plan, Iterate, Execute</h4>
+<p>The more I delved into Cloudflare Workers, it had me reconsider the necessity of a FastAPI backend. Conversations with <a href="https://ampcode.com/">Amp</a> led to the realization that I could focus solely on developing the frontend and the worker. With this clarity, I asked <a href="https://ampcode.com/">Amp</a> to consult the oracle and <a href="https://ampcode.com/threads/T-10c7e2cd-f791-4329-b748-59f6fdcd908e">draft a step-by-step plan</a>. Each step includes code references, snippets, and thorough descriptions. This method is one I frequently employ with Amp for optimal outcomes. The first task is to engage a strong reasoning model (oracle) for planning, saving the results in a TODO.md file. This document serves as a valuable tool for me to review, make adjustments, and further interrogate the plan. These models are good at playing devil’s advocate and exploring alternative options, even though it created the original plan! The key is to consistently initiate new fresh threads.</p>
+</section>
+<section id="data-strategy" class="level4">
+<h4 class="anchored" data-anchor-id="data-strategy">Data Strategy</h4>
+<p>On the data side of things, I wanted to use the PRISM 30-year normals data, but it came in a .bil format. How can I retrieve climate information based on a click on a JavaScript map anywhere in the US from this data? In consulting with <a href="https://ampcode.com/">Amp</a>, the best strategy appeared to be building a conversion pipeline to transform raw data into web tiles. The oracle was exceptionally helpful in drawing up a plan, including what this Python conversion script would look like. Being able to search for information about the frontend map I planned to use, combined with being able to load in the raw data, gave it a good head start in creating a working script. It was also smart enough to begin with a single variable and a month for testing, only expanding to all the data after iterating a few times and fixing issues as they appeared.</p>
+<p>For storage of POI names and coordinates, <a href="https://ampcode.com/">Amp’s</a> plan called for another conversion script + database loading script to populate a PostgreSQL database stored in Supabase efficiently. PostgreSQL was a good choice since it has numerous well-known extensions for geospatial operations and fuzzy searching.</p>
+</section>
+</section>
+<section id="building" class="level3">
+<h3 class="anchored" data-anchor-id="building">Building</h3>
+<p>With a comprehensive <a href="https://ampcode.com/">Amp</a> generated plan in place, after some back-and-forth to refine it, it was time to build.</p>
+<section id="data-loading" class="level4">
+<h4 class="anchored" data-anchor-id="data-loading">Data Loading</h4>
+<p>Before building the frontend and worker, the data needed to be transformed and loaded. <a href="https://ampcode.com/">Amp</a> was efficient at iterating through the <a href="https://ampcode.com/threads/T-72f4c1a8-42dc-4b2c-afcf-78fb161bf521">conversion and loading script</a> to get them to a point where they were working well. I simply had to run the Python scripts on the full dataset. There were a few snags related to using the Cloudflare worker CLI with <code>wrangler</code> and the Supabase CLI <code>supabase</code>, but <a href="https://ampcode.com/">Amp</a> helped me quickly parse through the documentation to troubleshoot.</p>
+</section>
+<section id="first-build" class="level4">
+<h4 class="anchored" data-anchor-id="first-build">First Build</h4>
+<p>After lots of preparation, it was time to make The Weather Scout finally come alive. I prompted <a href="https://ampcode.com/">Amp</a> to execute the plan outlined in <code>BUILD_TODO.md</code> and let it run through the initial build. First, I noticed some VS Code IDE diagnostic errors in the TypeScript codebase, so I started a fresh thread and had <a href="https://ampcode.com/">Amp</a> quickly resolve those issues. <a href="https://ampcode.com/">Amp</a> can retrieve diagnostic information from the IDE, which makes it efficient at identifying and fixing errors like this. I was able to run the frontend and workers locally for the first time and visit the URL in my browser at a localhost address, exciting!</p>
+<p>Unfortunately, there were several apparent issues:</p>
+<ul>
+<li>No basemap in the JavaScript map</li>
+<li>Text in the search box had no effect</li>
+<li>Clicking the map returned NAs in the temperature max, min, and avg boxes</li>
+</ul>
+<p>From past Geospatial work, I knew I would need to find a basemap provider to load into the application. <a href="https://ampcode.com/">Amp</a> helpfully <a href="https://ampcode.com/threads/T-561f0d27-9d1e-4c61-8b54-ccca5522ff96">searched the web and identified a couple of free/low-cost options</a>. MapTiler was an attractive option since it includes an outdoor-focused basemap, perfect for this outdoor-focused weather search application.</p>
+<p>For the other two issues, I suspected it was related to problems getting data to the frontend from the backend workers.</p>
+<p>Before I addressed the data issues, I sought a more efficient way to test the complete suite of services. Anytime I have multiple services in a project, I reach for podman compose, so I tasked <a href="https://ampcode.com/">Amp</a> with setting up a podman compose file to containerize each service and set up a just file so the agent could use simple commands such as <code>just run</code>, <code>just stop</code>, <code>just logs</code>, etc. <a href="https://ampcode.com/">Amp</a> was surprisingly good at setting up this infrastructure. I have used <a href="https://ampcode.com/">Amp</a> in projects with this sort of infrastructure setup in the past, and it was efficient in using them. However, this was my first time using an agent to generate them.</p>
+</section>
+<section id="agents.md" class="level4">
+<h4 class="anchored" data-anchor-id="agents.md">AGENTS.md</h4>
+<p>For the rest of the development of The Weather Scout, I planned on using <a href="https://ampcode.com/">Amp</a> in many different ways. To make <a href="https://ampcode.com/">Amp</a> more effective, it is imperative to have an <code>AGENTS.md</code> file to list build, test, and architecture information. The contents of this file are added to the context of each thread, which saves each thread from trying the wrong build step and wasting valuable time/tokens. First, I asked <a href="https://ampcode.com/">Amp</a> to generate one on its own, which always feels a bit circular, but it <a href="https://ampcode.com/threads/T-cf0bc424-ea5e-43c3-bf0f-3bead535228b">did a great job</a>. I edited a few works and was ready to start diving into further troubleshooting and refinement.</p>
+</section>
+<section id="data-troubleshooting" class="level4">
+<h4 class="anchored" data-anchor-id="data-troubleshooting">Data Troubleshooting</h4>
+<p>I experimented with various prompting techniques to get <a href="https://ampcode.com/">Amp</a> to efficiently identify the data issues and find a solution. In the end, the most effective strategy was to both describe my expectations versus what was occurring, pasting in screenshots, and asking it to try it on its own using <code>just run</code>, as well as visiting the localhost browser with Playwright MCP. I am not going to delve too much into MCPs in this post, as it’s a deep topic in itself. In short, it exposes a set of tools that the models can use if they decide to. In the case of Playwright, it provides models with access to the browser, allowing them to visit web pages, enter text, click buttons, view the console, and so on. Here is an <a href="https://ampcode.com/threads/T-e010c469-bd45-4607-8a14-81e227937145">example thread</a> where I had it fix a search issue.</p>
+<p><a href="https://ampcode.com/">Amp</a> had incorrectly wired up the search box to the interactive map, and markers were not placed correctly on map click. Once <a href="https://ampcode.com/">Amp</a> resolved these issues, it appeared that data issues persisted. <a href="https://ampcode.com/">Amp</a> identified the issue as the worker service shutting down with an error in the logs. Before proceeding, it was clear that the worker needed to be running correctly. <a href="https://ampcode.com/">Amp</a> also suggested to either use local data with the <code>--local</code> flag passed to <code>wrangler</code> or use <code>--remote</code> to use the actual R2 bucket. Since I had already loaded the data and wanted to ensure the R2 buckets in Cloudflare were actually working, I opted for the <code>--remote</code> option. Getting the <code>wrangler</code> commands right so that it would start properly took more time than I wanted it to, and unfortunately, <a href="https://ampcode.com/">Amp</a> was only of limited use. It made suggestions, but ultimately, I had to learn more about <code>wrangler</code> and the Worker/R2 infrastructure to determine the correct configuration settings.</p>
+<p>Finally the frontend was working with the worker but graphs were still blank. I provided a detailed description of the actions taken to reproduce the expected behavior, along with screenshots. <a href="https://ampcode.com/">Amp</a> <a href="https://ampcode.com/threads/T-91486df7-b836-49b9-9461-55434469d893">traced the issue</a> to how the data was being sampled from the tiles we generated earlier in the process. The basic version of the application was working!</p>
+</section>
+</section>
+<section id="refinement" class="level3">
+<h3 class="anchored" data-anchor-id="refinement">Refinement</h3>
+<p>At this point, I had a working application, but there were several issues/refinements I wanted to tackle before I could deploy for users.</p>
+<section id="search-issues" class="level4">
+<h4 class="anchored" data-anchor-id="search-issues">Search Issues</h4>
+<p>After manually testing the search with different locations across the US, I noticed that the results fell short of user standards. I went down a rabbit hole with <a href="https://ampcode.com/">Amp</a> to get suggestions on how to improve search, and to its credit, it did improve with various fuzzy search logic implementations. However, I was still not satisfied for a couple of reasons:</p>
+<ul>
+<li>Potential matches were slightly slow to load</li>
+<li>Many locations were not being found at all</li>
+<li>The information provided in the dropdown was not always helpful (“POI”)</li>
+</ul>
+<p>I have prior experience with geospatial web applications, and I knew that Google Maps had spoiled users to expecting the same quality of search suggestions. I began to think that implementing my own search with a database of locations was the wrong approach; there is simply no way the quality could match that of a service like Google Maps. I turned to the oracle in <a href="https://ampcode.com/">Amp</a> to <a href="https://ampcode.com/threads/T-8e2e41c4-0fc2-4855-9477-2ff99cdc4bd1">canvas the different geocoding + search API services</a> and present recommendations, knowing I still wanted to keep costs low. Google Maps was on the list, but I quickly ruled it out due to cost. The oracle suggested Mapbox’s Search API service, which offers a generous free tier that should suffice given visitor expectations.</p>
+<p>Next, I turned to <a href="https://ampcode.com/">Amp</a> to weigh the pros and cons of this decision to replace the current search with Mapbox. The pros outweighed the cons. I could eliminate Supabase/PostgreSQL, provide users with a superior search experience in terms of both accuracy and speed, and reduce the overall complexity of the code base.</p>
+</section>
+<section id="adding-mapbox" class="level4">
+<h4 class="anchored" data-anchor-id="adding-mapbox">Adding MapBox</h4>
+<p>With the decision made, the next step was, as always, to consult the oracle to create a comprehensive implementation plan, supplying it with links to Mapbox search API documentation. I went through a couple of iterations after I told <a href="https://ampcode.com/">Amp</a> it doesn’t need to be backwards compatible (this removed complexity) and to map out the complete removal of Supabase. One interesting part of the plan was the setting of <code>poi_categories</code> and <code>poi_categories_exclusions</code>. Initially, I liked the idea of steering the search results to a specific type of POI, such as mountains or lakes. However, I realized the categories it generated may not be correct. I found the Mapbox API endpoint that enumerates all the Mapbox POI categories and asked <a href="https://ampcode.com/">Amp</a> to cross-reference. Indeed, some categories were fabricated. I went through it carefully to ensure only legitimate categories were entered.</p>
+<p>With great excitement, knowing how much of a user improvement this would be, I started a new thread and let <a href="https://ampcode.com/">Amp</a> go to work executing the lengthy plan. From the first testing, the search worked like a dream; the results were so fast and helpful. However, upon testing more locations, I realized that some places I expected to be available were either not returning at all or returning to other countries. In the initial plan <a href="https://ampcode.com/">Amp</a> suggested constraining the Mapbox API to only return results within the US, which puzzled us both. After consulting with the oracle, <a href="https://ampcode.com/">Amp</a> finally figured out that the setting <code>MAPBOX_COUNTRY_FILTER = "us"</code> actually had to be <code>MAPBOX_COUNTRY_FILTER = "US"</code>, with the capitalized <code>US</code>. I was so happy for the oracle in that moment, I know from experience that it is the kind of bug that can drive a developer crazy and hold up progress.</p>
+<p>Search results were supposedly limited to the US, but some obvious locations were still randomly not returning any results. Puzzled I asked <a href="https://ampcode.com/">Amp</a> and it went about systematically troubleshooting:</p>
+<ul>
+<li>Use <code>just run</code> to start podman compose</li>
+<li>Accessed <code>localhost</code> in the browser</li>
+<li>Tried several search terms and recorded their results, including screenshots</li>
+<li>Check the browser console for any errors</li>
+<li>Checked the podman logs for worker errors</li>
+</ul>
+<p>It was in the worker logs that some 4XX code errors were spotted, indicating that the parameters being sent to Mapbox in some cases were incorrect. <a href="https://ampcode.com/">Amp</a> had a theory, so it continued to troubleshoot by removing various Mapbox API parameters one by one to see the results. Sure enough, by removing the <code>poi_categories</code> and <code>poi_categories_exclusions</code> categories, everything worked as expected. The results seemed so good without them specified, it seemed prudent to remove them and continue on. At last, the search was working!</p>
+<p>The last search-related task I wanted to refine is the type of information displayed in the search suggestions. I knew the Mapbox must be returning some details, such as city, state, and type of POI, etc. Still, rather than parsing through examples and documentation, I asked <a href="https://ampcode.com/">Amp</a> to <a href="https://ampcode.com/threads/T-0f229ccc-a1ce-4ebb-a6fa-126b78d10386">restructure how the search results are displayed</a>, using information from Mapbox, and show me the totality of available information. After a couple of threads, search items were richer, and I was happy with the experience.</p>
+</section>
+<section id="ui-enhancements" class="level4">
+<h4 class="anchored" data-anchor-id="ui-enhancements">UI Enhancements</h4>
+<p>When I had the oracle write the very first plan, I was focused on the architecture and technology, and I omitted much information about what I expected the UI to look like. The only information <a href="https://ampcode.com/">Amp</a> had to go on is that I wanted a location search box, a month selector, an interactive map, and the climate data for the selected location displayed. It did an excellent job bringing the application to life with minimal guidance in that respect, but I had some changes in mind before sharing it with other users.</p>
+<p>First, I wanted to overhaul the general UI to make it consistent and modern. The oracle is great for this sort of research. I often ask it to research a bunch of directions and make a recommendation. That way I can read through options (some of which I may have no prior experience with) and make a fact based decision before continuing. In this case <a href="https://ampcode.com/">Amp</a> <a href="https://ampcode.com/threads/T-299b7d89-9d38-4a53-b511-613e382a1e6a">provided a good recommendation</a> that I proceeded with.</p>
+<p>Next, I turned to redesigning the climate data display. It may sound almost unbelievable, but simply drawing a mockup of the desired UI state and providing it to <a href="https://ampcode.com/">Amp</a> as an image is often a good strategy. After creating a crude mockup in Figma of what I wanted the UI to look like under the map (data visualization part), I sent <a href="https://ampcode.com/">Amp</a> a <a href="https://ampcode.com/threads/T-eff01c26-b804-41b9-80c4-26c2eaa2c2e5">screenshot of the current state and my mockup</a>, asking the Oracle to create an implementation plan once again. Despite knowing that people had done this, I was still blown away by the plan, which came back to implement my vision; it was even better than I had expected. <a href="https://ampcode.com/">Amp</a> inferred some design decisions that I had in my head, but didn’t spend much time putting in the image, like a dashed vertical line to mark the month.</p>
+<p>I went through a couple of threads with <a href="https://ampcode.com/">Amp</a>, tweaking the UI to make it more user-friendly with information about the location. It also suggested that the elevation would be helpful for the user, which I agreed with, but I didn’t want to spend a lot of money on yet another API request. Helpfully, the oracle suggested two options: AWS Terrain Tiles, which are freely hosted on S3, and MapTiler’s elevation API service. To avoid any data mismatch issues, I opted to <a href="https://ampcode.com/threads/T-7c368c25-fd44-4b76-bd19-52c827c20d3c">use MapTiler’s elevation API</a>, which would ensure that the elevations on the base map matched. With no objections remaining, I had <a href="https://ampcode.com/">Amp</a> add that information for the user, neat!</p>
+</section>
+</section>
+<section id="deployment" class="level3">
+<h3 class="anchored" data-anchor-id="deployment">Deployment</h3>
+<p>Deployment was the easiest part of getting The Weather Scout off the ground. A sentence I never thought I would type, as the opposite was true in most past projects. Because I spent so much time upfront with <a href="https://ampcode.com/">Amp</a> planning the Architecture and integrating services from the beginning, I already knew how services would be hosted on Cloudflare, and the raster data was already in R2 buckets all along. I had <a href="https://ampcode.com/">Amp</a> help me create a checklist (with the Oracle’s help, of course) of items to prepare for deployment, including Cloudflare configuration, CI/CD pipelines, a release strategy, and additional security/cost implementations.</p>
+<p>The deployment plan wasn’t the type that I could have the main agent execute, as much of the setup was in Cloudflare, including adding secrets, etc. Instead, I had the Oracle assign roles to each step as either human or agent, and I went through it step by step. There were a few steps I could automate with <a href="https://ampcode.com/">Amp</a>, such as writing the actual GitHub actions .yaml files. It still took me some time to get this all right but having <a href="https://ampcode.com/">Amp</a> to ask when I got stuck sped things up.</p>
+<p>The list of enhancements for a project like this is always long, but it’s a good start. You can check out the website live now a https://theweatherscout.com</p>
+</section>
+</section>
+<section id="learnings" class="level2">
+<h2 class="anchored" data-anchor-id="learnings">Learnings</h2>
+<p>Taking on a project from start to finish using <a href="https://ampcode.com/">Amp</a> was a rewarding experience. Using these agentic tools is a skill that needs to be cultivated. We are only in the early innings, I am eager to continue building. My biggest takeaways are to start new threads more often, slow down and make deliberate architectural decisions, and to have the models check their own work continuously. Sometimes the models produce precisely what you are looking for, and sometimes they produce terrible code. It’s a highly jagged surface area, so you need to always be on your toes and supervising. Still, I created this site in significantly less time than if I were coding by hand.</p>
+
+
+</section>
+
+<script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
