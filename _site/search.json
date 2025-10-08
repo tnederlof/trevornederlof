@@ -1,5 +1,61 @@
 [
   {
+    "objectID": "thoughts/mcps-are-sometimes-useful/index.html",
+    "href": "thoughts/mcps-are-sometimes-useful/index.html",
+    "title": "MCPs are Sometimes Useful",
+    "section": "",
+    "text": "MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This introduction page on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.\nOnce you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained."
+  },
+  {
+    "objectID": "thoughts/mcps-are-sometimes-useful/index.html#introduction-to-mcps",
+    "href": "thoughts/mcps-are-sometimes-useful/index.html#introduction-to-mcps",
+    "title": "MCPs are Sometimes Useful",
+    "section": "",
+    "text": "MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This introduction page on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.\nOnce you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained."
+  },
+  {
+    "objectID": "thoughts/mcps-are-sometimes-useful/index.html#mcps-are-misunderstood",
+    "href": "thoughts/mcps-are-sometimes-useful/index.html#mcps-are-misunderstood",
+    "title": "MCPs are Sometimes Useful",
+    "section": "MCPs are misunderstood",
+    "text": "MCPs are misunderstood\nThere is a great deal of hype around MCP in 2025 with the rise of agentic tools. New MCP servers appear every day, conference talks are seemingly everywhere, and it’s hard to avoid someone talking about MCPs. Because of this, so many developers reach for MCPs for every task where an MCP exists (think GitHub, Linear, Playwright, etc).\nThe first thing many developers do is rush to add as many MCPs as they can find to the settings of their agent of choice (Amp, Claude Code, Codex, etc). Their thought process is, well if my agent has access to more tools, then it can accomplish more. In fact, this is often counterproductive and harms the effectiveness of the agent’s output.\nIt’s not that the protocol itself is inherently poor or that each MCP server is not useful; it comes down to how agents work and how precious their context is. Agents have a lot competing for space in the context window, including the system prompt, tools, user messages, agent responses, and more. Some MCP servers add hundreds of tools, many of which a developer will never need; this bloats, confuses, and slows down the agent."
+  },
+  {
+    "objectID": "thoughts/mcps-are-sometimes-useful/index.html#how-should-you-use-mcps",
+    "href": "thoughts/mcps-are-sometimes-useful/index.html#how-should-you-use-mcps",
+    "title": "MCPs are Sometimes Useful",
+    "section": "How should you use MCPs?",
+    "text": "How should you use MCPs?\nUse MCPs sparingly. Only use MCPs that are necessary for the task at hand. Avoid using MCPs that add unnecessary tools to the agent’s context. For example, if your project needs to access information from Datadog, then go ahead and use their MCP server, as it is reputable, and your agents workflow will gain a lot of value from using its tools. However, when you start another project where interoperability with observability tooling is not the focus, avoid keeping the Datadog MCP server around in your agent’s context.\nIt is also essential to ask yourself, for this project, what different methods are available to provide the agent with the necessary context for the problem at hand. For example, there are lots of ways to get information about issues and PRs from GitHub (e.g., GitHub API, GitHub CLI, GitHub MCP). It’s important to weigh the pros and cons of each.\n\nWhy I avoid the GitHub MCP server\nWhen it comes to actions related to GitHub, I avoid the GitHub MCP server. Adding the MCP will by default add many tools I will never use.\n\n\n\n\n\n\nFigure 1: Some of the many tools from the GitHub MCP server\n\n\n\nInstead, I authenticate my GitHub CLI and instruct the agent to use it for interacting with GitHub. The agent can read issues, review pull requests, create pull requests, and so on. Using the CLI works exceptionally well, as the GitHub CLI has been around for a while, and the agent knows how to utilize it effectively.\n\n\nSuccessful use case of the Sentry MCP server\nI recently built The Weather Scout and shared my experience building it. As part of the build, I set it up with Sentry for monitoring. No glaring issues arose over the course of the first few weeks, but some relatively obscure issues were flagged, mostly related to WebGL and the interactive maps. The Sentry MCP has a nice set of focused tools for surfacing detailed issue context.\nFirst, I added the Sentry MCP server to my Amp configuration (my agent of choice). Then I asked Amp to utilize the Sentry MCP to gather all the investigation details Sentry had captured about the issues and use the oracle to plan the fixes. With a solid plan in place, I requested separate commits for each issue, including a link back to Sentry for reference. Amp efficiently made the fixes as requested, manually tested and ran CI checks.\n\n\n\n\n\n\nFigure 2: Example of Sentry MCP tool calling in amp\n\n\n\nThis combination of Sentry and Amp was an effective way to fix some tricky issues that were difficult for me to uncover and fix on my own. For those that are curious, you can see the whole Amp thread."
+  },
+  {
+    "objectID": "thoughts.html",
+    "href": "thoughts.html",
+    "title": "Thoughts",
+    "section": "",
+    "text": "MCPs are Sometimes Useful\n\n\nA practical guide to using MCPs strategically, focusing on quality over quantity, to keep agents fast, focused, and effective.\n\n\n\n\n\n2025-10-08\n\n\nTrevor Nederlof\n\n\n\n\n\n\n\n\n\n\n\n\nBuilding The Weather Scout with Amp\n\n\nBehind the scenes of creating The Weather Scout using Amp (an agentic coding tool from Sourcegraph).\n\n\n\n\n\n2025-09-26\n\n\nTrevor Nederlof\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Trevor Nederlof",
+    "section": "",
+    "text": "Hello, I am Trevor Nederlof, a Senior Solutions Engineer at Sourcegraph, where I partner with software engineers at a variety of organizations to get the most out of Amp, our agentic coding tool.\nTo learn more about me, visit my About page.\nTo learn more about the projects I’m working on and the technologies I’m interested in, checkout my thoughts."
+  },
+  {
+    "objectID": "index.html#welcome-to-my-personal-website",
+    "href": "index.html#welcome-to-my-personal-website",
+    "title": "Trevor Nederlof",
+    "section": "",
+    "text": "Hello, I am Trevor Nederlof, a Senior Solutions Engineer at Sourcegraph, where I partner with software engineers at a variety of organizations to get the most out of Amp, our agentic coding tool.\nTo learn more about me, visit my About page.\nTo learn more about the projects I’m working on and the technologies I’m interested in, checkout my thoughts."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Present",
+    "section": "",
+    "text": "Present\nCurrently, I am a Senior Solutions Engineer at Sourcegraph (makers of Amp), where I empower developers in enterprise organizations to reinvent their workflows in the age of agentic tools. In addition to my work with customers, I genuinely enjoy using Amp every day to build and learn.\nOff the computer, I live in the Hudson Valley, New York, and spend as much time outdoors as possible. You can find me gardening, trail running/backpacking in the Catskills, or cooking up something new. I am also a fire commissioner and volunteer firefighter in Livingston, NY, where I proudly serve my community.\n\n\nPast\n\nPrincipal Solutions Architect at Posit, formerly RStudio (learned a lot about AI assistant, agentic tools, data science workflows and enterprise architectures, especially Kubernetes)\nSenior Solutions Engineer at CARTO (learned a lot about cloud infrastructure, data warehouses, geospatial analysis, and enterprise data science)\nPortfolio Solutions Developer at Neuberger Berman (learned a lot about infrastructure at a larger company with IT constraints and solution selling to large asset owners)\nQuantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure, and productionization as I was responsible for setting it all up)\nAssociate at Nomura on the interest rate derivatives sales desk (learned a lot about the inner workings of the mortgage market and sales in general)\nBachelor’s degree from Drexel University in Business Administration with concentrations in Finance and Economics (when I thought global markets trading was interesting)"
+  },
+  {
     "objectID": "thoughts/building-the-weather-scout-with-amp/index.html",
     "href": "thoughts/building-the-weather-scout-with-amp/index.html",
     "title": "Building The Weather Scout with Amp",
@@ -47,33 +103,5 @@
     "title": "Building The Weather Scout with Amp",
     "section": "Learnings",
     "text": "Learnings\nTaking on a project from start to finish using Amp was a rewarding experience. Using these agentic tools is a skill that needs to be cultivated. We are only in the early innings and I am eager to continue building. My biggest takeaways are to start new threads more often, slow down and make deliberate architectural decisions, and to have the models check their own work continuously. Sometimes the models produce precisely what you are looking for, and sometimes they produce terrible code. It’s a highly irregular, you always need to be on your toes and supervising. Still, I created this site in significantly less time than if I were coding by hand and learned along the way."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Present",
-    "section": "",
-    "text": "Present\nCurrently, I am a Senior Solutions Engineer at Sourcegraph (makers of Amp), where I empower developers in enterprise organizations to reinvent their workflows in the age of agentic tools. In addition to my work with customers, I genuinely enjoy using Amp every day to build and learn.\nOff the computer, I live in the Hudson Valley, New York, and spend as much time outdoors as possible. You can find me gardening, trail running/backpacking in the Catskills, or cooking up something new. I am also a fire commissioner and volunteer firefighter in Livingston, NY, where I proudly serve my community.\n\n\nPast\n\nPrincipal Solutions Architect at Posit, formerly RStudio (learned a lot about AI assistant, agentic tools, data science workflows and enterprise architectures, especially Kubernetes)\nSenior Solutions Engineer at CARTO (learned a lot about cloud infrastructure, data warehouses, geospatial analysis, and enterprise data science)\nPortfolio Solutions Developer at Neuberger Berman (learned a lot about infrastructure at a larger company with IT constraints and solution selling to large asset owners)\nQuantitative Portfolio Developer at Risk Premium Investments (learned a lot about programming, databases, infrastructure, and productionization as I was responsible for setting it all up)\nAssociate at Nomura on the interest rate derivatives sales desk (learned a lot about the inner workings of the mortgage market and sales in general)\nBachelor’s degree from Drexel University in Business Administration with concentrations in Finance and Economics (when I thought global markets trading was interesting)"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Trevor Nederlof",
-    "section": "",
-    "text": "Hello, I am Trevor Nederlof, a Senior Solutions Engineer at Sourcegraph, where I partner with software engineers at a variety of organizations to get the most out of Amp, our agile coding tool.\nTo learn more about me, visit my About page.\nTo learn more about the projects I’m working on and the technologies I’m interested in, checkout my thoughts."
-  },
-  {
-    "objectID": "index.html#welcome-to-my-personal-website",
-    "href": "index.html#welcome-to-my-personal-website",
-    "title": "Trevor Nederlof",
-    "section": "",
-    "text": "Hello, I am Trevor Nederlof, a Senior Solutions Engineer at Sourcegraph, where I partner with software engineers at a variety of organizations to get the most out of Amp, our agile coding tool.\nTo learn more about me, visit my About page.\nTo learn more about the projects I’m working on and the technologies I’m interested in, checkout my thoughts."
-  },
-  {
-    "objectID": "thoughts.html",
-    "href": "thoughts.html",
-    "title": "Thoughts",
-    "section": "",
-    "text": "Building The Weather Scout with Amp\n\n\nBehind the scenes of creating The Weather Scout using Amp (an agentic coding tool from Sourcegraph).\n\n\n\n\n\n2025-09-26\n\n\nTrevor Nederlof\n\n\n\n\n\nNo matching items"
   }
 ]

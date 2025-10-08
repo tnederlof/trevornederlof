@@ -1,0 +1,61 @@
+---
+title: "MCPs are Sometimes Useful"
+description: |
+    A practical guide to using MCPs strategically, focusing on quality over quantity, to keep agents fast, focused, and effective.
+date: "2025-10-08"
+categories:
+  - amp
+  - ai
+  - llm
+  - mcp
+  - bugs
+  - agent
+  - frontend
+  - gis
+  - weather
+code-fold: true
+draft: false
+freeze: true
+appendix-style: none #(default, plain, none)
+---
+
+## Introduction to MCPs
+
+MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This [introduction page](https://modelcontextprotocol.io/docs/getting-started/intro) on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.
+
+Once you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained.
+
+## MCPs are misunderstood
+
+There is a great deal of hype around MCP in 2025 with the rise of agentic tools. New MCP servers appear every day, conference talks are seemingly everywhere, and it's hard to avoid someone talking about MCPs. Because of this, so many developers reach for MCPs for every task where an MCP exists (think GitHub, Linear, Playwright, etc).
+
+The first thing many developers do is rush to add as many MCPs as they can find to the settings of their agent of choice (Amp, Claude Code, Codex, etc). Their thought process is, well if my agent has access to more tools, then it can accomplish more. In fact, this is often counterproductive and harms the effectiveness of the agent's output.
+
+It's not that the protocol itself is inherently poor or that each MCP server is not useful; it comes down to how agents work and how precious their context is. Agents have a lot competing for space in the context window, including the system prompt, tools, user messages, agent responses, and more. Some MCP servers add hundreds of tools, many of which a developer will never need; this bloats, confuses, and slows down the agent.
+
+## How should you use MCPs?
+
+Use MCPs sparingly. Only use MCPs that are necessary for the task at hand. Avoid using MCPs that add unnecessary tools to the agent's context. For example, if your project needs to access information from Datadog, then go ahead and use [their MCP server](https://docs.datadoghq.com/bits_ai/mcp_server/), as it is reputable, and your agents workflow will gain a lot of value from using its tools. However, when you start another project where interoperability with observability tooling is not the focus, avoid keeping the Datadog MCP server around in your agent's context.
+
+It is also essential to ask yourself, for this project, what different methods are available to provide the agent with the necessary context for the problem at hand. For example, there are lots of ways to get information about issues and PRs from GitHub (e.g., GitHub API, GitHub CLI, GitHub MCP). It's important to weigh the pros and cons of each. 
+
+### Why I avoid the GitHub MCP server
+
+When it comes to actions related to GitHub, I avoid the [GitHub MCP server](https://github.com/github/github-mcp-server). Adding the MCP will by default add many tools I will never use.
+
+![Some of the many tools from the GitHub MCP server](github_tools.png){#fig-github-tools fig-align="left" height=800}
+
+Instead, I authenticate my GitHub CLI and instruct the agent to use it for interacting with GitHub. The agent can read issues, review pull requests, create pull requests, and so on. Using the CLI works exceptionally well, as the GitHub CLI has been around for a while, and the agent knows how to utilize it effectively.
+
+### Successful use case of the Sentry MCP server
+
+I recently built [The Weather Scout](https://theweatherscout.com/) and [shared my experience building it](https://www.trevornederlof.me/thoughts/building-the-weather-scout-with-amp/). As part of the build, I set it up with Sentry for monitoring. No glaring issues arose over the course of the first few weeks, but some relatively obscure issues were flagged, mostly related to WebGL and the interactive maps. The [Sentry MCP](https://docs.sentry.io/product/sentry-mcp/) has a nice set of focused tools for surfacing detailed issue context.
+
+First, I added the [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) to my [Amp](https://ampcode.com/) configuration (my agent of choice). Then I asked [Amp](https://ampcode.com/) to utilize the Sentry MCP to gather all the investigation details Sentry had captured about the issues and use the oracle to plan the fixes. With a solid plan in place, I requested separate commits for each issue, including a link back to Sentry for reference. Amp efficiently made the fixes as requested, manually tested and ran CI checks.
+
+![Example of Sentry MCP tool calling in amp](sentry_mcp_calls.png){#fig-sentry-mcp-calls}
+
+This combination of Sentry and [Amp](https://ampcode.com/) was an effective way to fix some tricky issues that were difficult for me to uncover and fix on my own. For those that are curious, you can see the [whole Amp thread](https://ampcode.com/threads/T-46b35f4d-e0ae-4fa8-ace9-5e9a6675354e).
+
+
+

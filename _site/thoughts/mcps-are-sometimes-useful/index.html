@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Trevor Nederlof">
+<meta name="dcterms.date" content="2025-10-08">
+<meta name="description" content="A practical guide to using MCPs strategically, focusing on quality over quantity, to keep agents fast, focused, and effective.">
 
-<title>Trevor Nederlof</title>
+<title>MCPs are Sometimes Useful – Trevor Nederlof</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,19 +26,20 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-672a9d6f2a875e614c0ac025ca3534ad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-672a9d6f2a875e614c0ac025ca3534ad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -51,6 +55,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 
 
 <link rel="stylesheet" href="styles.css">
@@ -63,9 +68,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Trevor Nederlof</span>
     </a>
   </div>
@@ -75,11 +80,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./thoughts.html"> 
+    <a class="nav-link" href="../../thoughts.html"> 
 <span class="menu-text">Thoughts</span></a>
   </li>  
   <li class="nav-item compact">
@@ -111,57 +116,128 @@ ul.task-list li input[type="checkbox"] {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
+   
   <ul>
-  <li><a href="#welcome-to-my-personal-website" id="toc-welcome-to-my-personal-website" class="nav-link active" data-scroll-target="#welcome-to-my-personal-website">Welcome to my personal website!</a></li>
+  <li><a href="#introduction-to-mcps" id="toc-introduction-to-mcps" class="nav-link active" data-scroll-target="#introduction-to-mcps">Introduction to MCPs</a></li>
+  <li><a href="#mcps-are-misunderstood" id="toc-mcps-are-misunderstood" class="nav-link" data-scroll-target="#mcps-are-misunderstood">MCPs are misunderstood</a></li>
+  <li><a href="#how-should-you-use-mcps" id="toc-how-should-you-use-mcps" class="nav-link" data-scroll-target="#how-should-you-use-mcps">How should you use MCPs?</a>
+  <ul class="collapse">
+  <li><a href="#why-i-avoid-the-github-mcp-server" id="toc-why-i-avoid-the-github-mcp-server" class="nav-link" data-scroll-target="#why-i-avoid-the-github-mcp-server">Why I avoid the GitHub MCP server</a></li>
+  <li><a href="#successful-use-case-of-the-sentry-mcp-server" id="toc-successful-use-case-of-the-sentry-mcp-server" class="nav-link" data-scroll-target="#successful-use-case-of-the-sentry-mcp-server">Successful use case of the Sentry MCP server</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<div class="quarto-about-trestles">
-  <div class="about-entity">
-    <img src="profile.png" class="about-image
-  rounded " style="width: 20em;">
+<main class="content" id="quarto-document-content">
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Trevor Nederlof</h1>
-</div>
-<div class="quarto-title-meta">
+<h1 class="title">MCPs are Sometimes Useful</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">amp</div>
+    <div class="quarto-category">ai</div>
+    <div class="quarto-category">llm</div>
+    <div class="quarto-category">mcp</div>
+    <div class="quarto-category">bugs</div>
+    <div class="quarto-category">agent</div>
+    <div class="quarto-category">frontend</div>
+    <div class="quarto-category">gis</div>
+    <div class="quarto-category">weather</div>
   </div>
-</header>
-    <div class="about-links">
-  <a href="https://github.com/tnederlof/" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
-  <a href="https://www.linkedin.com/in/trevor-nederlof/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="mailto:trevor.nederlof@hey.com" class="about-link" rel="" target="">
-    <i class="bi bi-envelope-at"></i>
-     <span class="about-link-text">Email</span>
-  </a>
-  <a href="https://x.com/tnederlof" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text">X</span>
-  </a>
-</div>
   </div>
-  <div class="about-contents"><main class="content" id="quarto-document-content">
 
-<section id="welcome-to-my-personal-website" class="level2">
-<h2 data-anchor-id="welcome-to-my-personal-website">Welcome to my personal website!</h2>
-<p>Hello, I am Trevor Nederlof, a Senior Solutions Engineer at <a href="https://sourcegraph.com/">Sourcegraph</a>, where I partner with software engineers at a variety of organizations to get the most out of <a href="https://ampcode.com/">Amp</a>, our agentic coding tool.</p>
-<p>To learn more about me, visit my <a href="./about.html">About page</a>.</p>
-<p>To learn more about the projects I’m working on and the technologies I’m interested in, checkout my <a href="./thoughts.html">thoughts</a>.</p>
+<div>
+  <div class="description">
+    <p>A practical guide to using MCPs strategically, focusing on quality over quantity, to keep agents fast, focused, and effective.</p>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.trevornederlof.me">Trevor Nederlof</a> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 8, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-mcps" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-mcps">Introduction to MCPs</h2>
+<p>MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This <a href="https://modelcontextprotocol.io/docs/getting-started/intro">introduction page</a> on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.</p>
+<p>Once you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained.</p>
+</section>
+<section id="mcps-are-misunderstood" class="level2">
+<h2 class="anchored" data-anchor-id="mcps-are-misunderstood">MCPs are misunderstood</h2>
+<p>There is a great deal of hype around MCP in 2025 with the rise of agentic tools. New MCP servers appear every day, conference talks are seemingly everywhere, and it’s hard to avoid someone talking about MCPs. Because of this, so many developers reach for MCPs for every task where an MCP exists (think GitHub, Linear, Playwright, etc).</p>
+<p>The first thing many developers do is rush to add as many MCPs as they can find to the settings of their agent of choice (Amp, Claude Code, Codex, etc). Their thought process is, well if my agent has access to more tools, then it can accomplish more. In fact, this is often counterproductive and harms the effectiveness of the agent’s output.</p>
+<p>It’s not that the protocol itself is inherently poor or that each MCP server is not useful; it comes down to how agents work and how precious their context is. Agents have a lot competing for space in the context window, including the system prompt, tools, user messages, agent responses, and more. Some MCP servers add hundreds of tools, many of which a developer will never need; this bloats, confuses, and slows down the agent.</p>
+</section>
+<section id="how-should-you-use-mcps" class="level2">
+<h2 class="anchored" data-anchor-id="how-should-you-use-mcps">How should you use MCPs?</h2>
+<p>Use MCPs sparingly. Only use MCPs that are necessary for the task at hand. Avoid using MCPs that add unnecessary tools to the agent’s context. For example, if your project needs to access information from Datadog, then go ahead and use <a href="https://docs.datadoghq.com/bits_ai/mcp_server/">their MCP server</a>, as it is reputable, and your agents workflow will gain a lot of value from using its tools. However, when you start another project where interoperability with observability tooling is not the focus, avoid keeping the Datadog MCP server around in your agent’s context.</p>
+<p>It is also essential to ask yourself, for this project, what different methods are available to provide the agent with the necessary context for the problem at hand. For example, there are lots of ways to get information about issues and PRs from GitHub (e.g., GitHub API, GitHub CLI, GitHub MCP). It’s important to weigh the pros and cons of each.</p>
+<section id="why-i-avoid-the-github-mcp-server" class="level3">
+<h3 class="anchored" data-anchor-id="why-i-avoid-the-github-mcp-server">Why I avoid the GitHub MCP server</h3>
+<p>When it comes to actions related to GitHub, I avoid the <a href="https://github.com/github/github-mcp-server">GitHub MCP server</a>. Adding the MCP will by default add many tools I will never use.</p>
+<div id="fig-github-tools" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-github-tools-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="github_tools.png" class="quarto-figure quarto-figure-left figure-img" height="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-tools-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Some of the many tools from the GitHub MCP server
+</figcaption>
+</figure>
+</div>
+<p>Instead, I authenticate my GitHub CLI and instruct the agent to use it for interacting with GitHub. The agent can read issues, review pull requests, create pull requests, and so on. Using the CLI works exceptionally well, as the GitHub CLI has been around for a while, and the agent knows how to utilize it effectively.</p>
+</section>
+<section id="successful-use-case-of-the-sentry-mcp-server" class="level3">
+<h3 class="anchored" data-anchor-id="successful-use-case-of-the-sentry-mcp-server">Successful use case of the Sentry MCP server</h3>
+<p>I recently built <a href="https://theweatherscout.com/">The Weather Scout</a> and <a href="https://www.trevornederlof.me/thoughts/building-the-weather-scout-with-amp/">shared my experience building it</a>. As part of the build, I set it up with Sentry for monitoring. No glaring issues arose over the course of the first few weeks, but some relatively obscure issues were flagged, mostly related to WebGL and the interactive maps. The <a href="https://docs.sentry.io/product/sentry-mcp/">Sentry MCP</a> has a nice set of focused tools for surfacing detailed issue context.</p>
+<p>First, I added the <a href="https://docs.sentry.io/product/sentry-mcp/">Sentry MCP server</a> to my <a href="https://ampcode.com/">Amp</a> configuration (my agent of choice). Then I asked <a href="https://ampcode.com/">Amp</a> to utilize the Sentry MCP to gather all the investigation details Sentry had captured about the issues and use the oracle to plan the fixes. With a solid plan in place, I requested separate commits for each issue, including a link back to Sentry for reference. Amp efficiently made the fixes as requested, manually tested and ran CI checks.</p>
+<div id="fig-sentry-mcp-calls" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sentry-mcp-calls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="sentry_mcp_calls.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sentry-mcp-calls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Example of Sentry MCP tool calling in amp
+</figcaption>
+</figure>
+</div>
+<p>This combination of Sentry and <a href="https://ampcode.com/">Amp</a> was an effective way to fix some tricky issues that were difficult for me to uncover and fix on my own. For those that are curious, you can see the <a href="https://ampcode.com/threads/T-46b35f4d-e0ae-4fa8-ace9-5e9a6675354e">whole Amp thread</a>.</p>
 
 
 </section>
-<script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script></main></div>
-</div>
- <!-- /main -->
+</section>
+
+<script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -558,4 +634,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
