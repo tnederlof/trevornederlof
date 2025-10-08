@@ -10,9 +10,6 @@ categories:
   - mcp
   - bugs
   - agent
-  - frontend
-  - gis
-  - weather
 code-fold: true
 draft: false
 freeze: true
@@ -24,6 +21,10 @@ appendix-style: none #(default, plain, none)
 MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This [introduction page](https://modelcontextprotocol.io/docs/getting-started/intro) on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.
 
 Once you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained.
+
+Most agentic tools support adding MCPs via a command line argument, json settings files or a settings UI page. [Amp](https://ampcode.com/), my coding agent of choice and has a settings UI in its VS Code extension (figure below) but it is also possible to be set in configuration files or via CLI.
+
+![Managing MCP servers and tools in the Amp VS Code settings](mcp-tools-menu-vscode.png){#fig-mcp-tools-menu fig-align="left" width=800}
 
 ## MCPs are misunderstood
 

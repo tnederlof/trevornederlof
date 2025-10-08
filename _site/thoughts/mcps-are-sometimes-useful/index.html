@@ -141,9 +141,6 @@ ul.task-list li input[type="checkbox"] {
     <div class="quarto-category">mcp</div>
     <div class="quarto-category">bugs</div>
     <div class="quarto-category">agent</div>
-    <div class="quarto-category">frontend</div>
-    <div class="quarto-category">gis</div>
-    <div class="quarto-category">weather</div>
   </div>
   </div>
 
@@ -182,6 +179,17 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="introduction-to-mcps">Introduction to MCPs</h2>
 <p>MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems. It is commonly used to provide tools to agents, allowing them to access information from external systems. This <a href="https://modelcontextprotocol.io/docs/getting-started/intro">introduction page</a> on the Model Context Protocol website offers a wealth of knowledge about the protocol and its various use cases.</p>
 <p>Once you start looking, you’ll find MCP servers powering a wide range of services and projects. But like many technologies, they’re not all created equal. It’s essential to perform thorough due diligence, research the reputation of the MCP server, evaluate its security posture, and assess not just which tools it offers but how well those tools are implemented and maintained.</p>
+<p>Most agentic tools support adding MCPs via a command line argument, json settings files or a settings UI page. <a href="https://ampcode.com/">Amp</a>, my coding agent of choice and has a settings UI in its VS Code extension (figure below) but it is also possible to be set in configuration files or via CLI.</p>
+<div id="fig-mcp-tools-menu" class="quarto-float quarto-figure quarto-figure-left anchored" data-fig-align="left">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mcp-tools-menu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="mcp-tools-menu-vscode.png" class="img-fluid quarto-figure quarto-figure-left figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcp-tools-menu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Managing MCP servers and tools in the Amp VS Code settings
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="mcps-are-misunderstood" class="level2">
 <h2 class="anchored" data-anchor-id="mcps-are-misunderstood">MCPs are misunderstood</h2>
@@ -202,7 +210,7 @@ ul.task-list li input[type="checkbox"] {
 <img src="github_tools.png" class="quarto-figure quarto-figure-left figure-img" height="800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-tools-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Some of the many tools from the GitHub MCP server
+Figure&nbsp;2: Some of the many tools from the GitHub MCP server
 </figcaption>
 </figure>
 </div>
@@ -218,7 +226,7 @@ Figure&nbsp;1: Some of the many tools from the GitHub MCP server
 <img src="sentry_mcp_calls.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sentry-mcp-calls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Example of Sentry MCP tool calling in amp
+Figure&nbsp;3: Example of Sentry MCP tool calling in amp
 </figcaption>
 </figure>
 </div>
